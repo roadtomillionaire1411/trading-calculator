@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bảng tính giao dịch</title>
+<style>
+:root{color-scheme:dark;--bg:#0c1118;--panel:#141d28;--line:#283444;--muted:#98aabe;--green:#72e2bc;--red:#ff8e9c}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#eef4fc;font:14px/1.5 system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:30px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}h1{font-size:28px;letter-spacing:-1px;margin:0}h2{font-size:16px;margin:0 0 18px}p{margin:6px 0 14px}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--green);text-transform:uppercase}.muted,small{color:var(--muted)}.badge{border:1px solid var(--line);padding:8px 13px;border-radius:20px}.layout{display:grid;grid-template-columns:430px 1fr;gap:22px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}label{display:block;color:var(--muted);font-size:12px}input,select,button,textarea{font:inherit}input,select,textarea{width:100%;background:#0e1620;border:1px solid #35465b;border-radius:8px;color:#eef4fc;padding:10px;margin-top:5px}input:focus,select:focus,button:focus-visible{outline:2px solid var(--green);outline-offset:2px}input:disabled,select:disabled{opacity:.55}button{border:1px solid #3f5267;border-radius:8px;background:#243446;color:#eef4fc;padding:10px 14px;cursor:pointer}button:hover{filter:brightness(1.13)}button:disabled{opacity:.4;cursor:default}.primary{background:var(--green);color:#102921;border:0;font-weight:700}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.entry{border:1px solid #477c70;background:#132923}.entry input{font-size:29px;font-weight:650;color:var(--green)}.entry label{color:var(--green)}.metricgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.metric{padding:17px;border:1px solid var(--line);border-radius:12px;background:#101923}.metric strong{font-size:24px;display:block;letter-spacing:-.7px}.positive{color:var(--green)}.negative{color:var(--red)}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th{text-align:right;color:var(--muted);font-size:11px;font-weight:500}td{text-align:right;border-top:1px solid var(--line);padding:15px 7px}th:first-child,td:first-child{text-align:left}.tablewrap{overflow:auto}.targets{display:grid;grid-template-columns:1fr 1fr;gap:10px}.notice{font-size:12px;color:#eac788;margin-top:12px;white-space:pre-line}.status{font-size:12px;color:var(--muted);min-height:38px;margin:12px 0}.feed{display:flex;justify-content:space-between;align-items:center}.feed strong{font-size:26px}.divider{border-top:1px solid var(--line);margin:18px 0}details{font-size:12px;color:var(--muted)}summary{cursor:pointer;color:#cedbea}a{color:var(--green)}textarea{min-height:170px;resize:vertical}#modeHint{font-size:12px}.locked{color:var(--green)}footer{font-size:12px;color:var(--muted);margin:8px 0 25px}input[type=checkbox]{width:auto;margin-right:6px}.check{display:flex;align-items:center;gap:5px}.quoteNote{font-size:11px}.topline{display:flex;justify-content:space-between;gap:10px}.tp-title{margin:16px 0 8px;font-size:12px;color:#eef4fc}.fundinggrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.fundingmetric{padding:14px;border:1px solid var(--line);border-radius:10px;background:#101923}.fundingmetric span{display:block;color:var(--muted);font-size:11px}.fundingmetric strong{display:block;margin-top:5px;font-size:18px;font-variant-numeric:tabular-nums}.funding-status{margin:10px 0 0;font-size:11px;color:var(--muted)}@media(max-width:1000px){main{padding:18px}.layout{grid-template-columns:360px 1fr}.metricgrid{grid-template-columns:1fr}.metric strong{font-size:21px}}@media(max-width:760px){.layout{display:block}header{align-items:flex-start;gap:10px}.badge{font-size:10px}.metricgrid{grid-template-columns:1fr 1fr}.panel{padding:17px}h1{font-size:23px}}@media print{body{background:white;color:black}.panel,.metric{background:white;color:black}button,.setup,details{display:none}.layout{display:block}}
+
+.position-card{background:#080d12;border-color:#354252}.position-head{display:flex;justify-content:space-between;gap:20px;align-items:start}.position-head h2{font-size:22px;margin:0 0 4px}.pnl-block{text-align:right}.pnl-block strong{display:block;font-size:25px;font-variant-numeric:tabular-nums}.position-numbers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:26px 0 18px}.position-numbers span{display:block;color:var(--muted);font-size:11px}.position-numbers strong{display:block;margin-top:6px;font-size:17px;overflow-wrap:anywhere}.position-exits{padding:12px;border-radius:8px;background:#141c25}.position-foot{font-size:11px;color:var(--muted);margin-top:12px}@media(max-width:1050px){.position-numbers{grid-template-columns:repeat(2,minmax(0,1fr))}.position-head{flex-wrap:wrap}.pnl-block{text-align:left}.fundinggrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style></head><body><main>
+<header><h1>Bảng tính giao dịch</h1></header>
+<div class="layout"><section class="setup">
+<div class="panel"><h2>01 / Thị trường & vị thế</h2><div class="grid">
+<label>Sàn giao dịch<select id="exchange"><option value="bybit">Bybit</option><option value="okx">OKX</option></select></label>
+<label>Cặp giao dịch<select id="symbol"></select></label>
+<label>Chiều lệnh<select id="side"><option value="1">Long / Mua</option><option value="-1">Short / Bán</option></select></label>
+<label>Loại lệnh<select id="order"><option value="Limit">Limit · Lệnh giới hạn</option><option value="Market">Market · Lệnh thị trường</option></select></label>
+<label>Chế độ ký quỹ<select id="marginMode"><option value="Cross">Cross</option><option value="Isolated">Isolated</option></select></label><label>Giá tính lời/lỗ hiện tại<select id="pnlSource"><option value="mark">Mark Price</option><option value="last">Last Price</option></select></label>
+<label class="full">Đòn bẩy của lệnh (×)<input id="leverage" type="number" min="1" step="any" value="10"></label>
+<small class="full">Nhập đúng mức anh chọn trên sàn, ví dụ 40×. Ký quỹ 100 USDT ở 40× tương ứng vị thế khoảng 4.000 USDT, chưa tính phí. Mức tối đa của sàn chỉ là giới hạn, không phải đòn bẩy đang dùng.</small>
+<details class="full"><summary>Nâng cao · khi cần tự đặt giới hạn đòn bẩy</summary>
+<p>Chỉ thay giới hạn kiểm tra của bảng tính, không thay đòn bẩy trên sàn. Khi API không hoạt động, giới hạn nhập tay bên dưới được dùng tạm.</p>
+<label class="check"><input id="override" type="checkbox">Dùng giới hạn kiểm tra tự nhập</label>
+<label>Giới hạn kiểm tra (×)<input id="manualMax" type="number" min="1" max="1000" value="20"></label></details>
+</div><div id="metadata" class="status" aria-live="polite">Đang tải thông số hợp đồng…</div>
+<div class="grid"><label>Vốn dành cho futures (USDT)<input id="equity" type="number" min="0" step="any" value="10000"></label>
+<label>Tính khối lượng theo<select id="sizing"><option value="margin">Tiền ký quỹ · USDT</option><option value="notional">Giá trị vị thế · USDT</option><option value="quantity">Số lượng tài sản cơ sở</option><option value="risk">Rủi ro SL · % vốn</option></select></label>
+<small class="full">Vốn này dùng để tính % rủi ro và khối lượng theo rủi ro. Nhập phần vốn anh dành cho futures; không cộng ví ngoài hoặc vốn đầu tư khác. Nếu không nhập vốn Cross riêng, mô hình thanh lý giả định toàn bộ phần vốn này bảo đảm cho một vị thế duy nhất.</small>
+<label class="full">Giá trị nhập<input id="size" type="number" min="0" step="any" value="1000"></label></div>
+<small>Tính khối lượng theo rủi ro đã bao gồm phí vào lệnh và cắt lỗ. Khi có dữ liệu sàn, khối lượng được làm tròn xuống theo bước hợp lệ.</small>
+</div>
+<div class="panel entry"><div class="topline"><h2>02 / Cập nhật giá Entry</h2><span id="modeLabel">Lập kế hoạch</span></div><label>Giá vào lệnh (Entry) · USDT<input id="entry" type="number" min="0" step="any" value="60000"></label>
+<div class="actions"><button id="usePrice">Lấy giá hiện tại</button><button id="lock" class="primary">Đã vào lệnh · Khóa thiết lập</button><button id="unlock" hidden>Sửa thiết lập</button></div><div id="lockFeedback" class="notice" role="status" aria-live="polite" hidden></div><p id="modeHint">Dữ liệu mẫu. Bấm “Đã vào lệnh” để khóa khối lượng và thiết lập, chỉ cho sửa Entry. Công cụ không gửi lệnh lên sàn.</p></div>
+<div class="panel"><h2>Ước tính giá thanh lý</h2><p class="muted">Mô hình một vị thế USDT, không có lệnh chờ hay khoản vay. Giá thanh lý thực tế của tài khoản có thể khác.</p>
+<label>Vốn bảo đảm Cross · USDT<input id="liqCollateral" type="number" min="0" step="any" placeholder="Để trống: dùng vốn futures đã nhập"></label><small>Toàn bộ vốn bảo đảm, đã gồm ký quỹ vị thế; không phải riêng số dư khả dụng. Nhập số sau phí đã trả, chưa cộng lời/lỗ chưa chốt của vị thế này. Nếu bỏ trống, giả định toàn bộ vốn futures dùng cho vị thế này.</small>
+<label>Ký quỹ bổ sung Isolated · USDT<input id="liqExtra" type="number" min="0" step="any" value="0"></label><small>Isolated dùng ký quỹ ban đầu ước tính + khoản bổ sung này.</small>
+<label>Nguồn tỷ lệ ký quỹ duy trì<select id="liqSource"><option value="auto">Tự lấy bậc rủi ro từ sàn</option><option value="manual">Tự nhập thông số mô phỏng</option></select></label>
+<div class="grid"><label>MMR nhập tay · %<input id="liqMmr" type="number" min="0" max="99" step="any" value="0.5"></label><label>Khấu trừ duy trì · USDT<input id="liqDeduction" type="number" min="0" step="any" value="0"></label></div><small>0,5% là giả định mẫu khi anh chọn nhập tay, không phải mức áp dụng cho mọi cặp.</small>
+<p id="liqSourceStatus" class="status">Đang tải bậc rủi ro…</p></div>
+<div class="panel"><h2>03 / Chốt lời, cắt lỗ & phí</h2><label>Khi thay đổi Entry<select id="anchor"><option value="relative">Giữ khoảng cách % · Dời giá SL / TP</option><option value="absolute">Giữ giá SL / TP · Tính lại khoảng cách</option></select></label><small>Thay đổi giá tại đây không sửa các lệnh đang đặt trên sàn.</small>
+<label style="margin-top:14px" id="stopLabel">Khoảng cách SL %<input id="stop" type="number" min="0" step="any" value="2"></label>
+<div class="tp-title">Mục tiêu chốt lời · Tổng tỷ lệ đóng phải bằng 100%</div><div class="targets">
+<label id="tp1Label">Khoảng cách TP1 %<input id="tp1" type="number" min="0" step="any" value="2"></label><label>Đóng tại TP1 %<input id="weight1" type="number" min="0" max="100" step="any" value="40"></label>
+<label id="tp2Label">Khoảng cách TP2 %<input id="tp2" type="number" min="0" step="any" value="4"></label><label>Đóng tại TP2 %<input id="weight2" type="number" min="0" max="100" step="any" value="35"></label>
+<label id="tp3Label">Khoảng cách TP3 %<input id="tp3" type="number" min="0" step="any" value="6"></label><label>Đóng tại TP3 %<input id="weight3" type="number" min="0" max="100" step="any" value="25"></label></div>
+<div class="divider"></div><label>Nguồn mức phí<select id="feePreset"><option value="reference">Mức cơ bản tham khảo theo sàn</option><option value="custom">Tự nhập theo tài khoản của tôi</option></select></label><p id="feeSource" class="status"></p><div class="grid"><label>Phí khớp lệnh vào<select id="fillFee"><option value="taker">Taker</option><option value="maker">Maker</option></select></label><label>Phí khớp lệnh TP<select id="tpFee"><option value="taker">Taker</option><option value="maker">Maker</option></select></label><label>Phí Maker %<input id="maker" type="number" step="any" value="0.02"></label><label>Phí Taker / SL %<input id="taker" type="number" step="any" value="0.055"></label></div><small>Phí tính trên giá trị khớp lệnh, không tính trên tiền ký quỹ. Maker: lệnh nằm chờ và được khớp; Taker: lấy thanh khoản có sẵn. Limit không mặc định là Maker. Market và SL đang giả định Taker. Phí thực tế tùy hạng tài khoản, khu vực, cặp và ưu đãi; chưa gồm funding/trượt giá.</small></div>
+</section><section>
+<div class="panel"><div class="feed"><div><div class="eyebrow" id="instrument">Bybit · BTCUSDT · Vĩnh cửu USDT</div><div class="muted">Giá khớp gần nhất (Last)</div><strong id="quote">—</strong><span class="muted"> USDT</span></div><button id="refresh">Cập nhật dữ liệu</button></div><div id="quoteStatus" class="quoteNote muted">Đang kết nối giá trực tiếp…</div><div id="quoteCompare" class="quoteNote muted"></div><p class="quoteNote">Đối chiếu cùng sàn, cùng mã hợp đồng và cùng loại giá. BTCUSDT khác BTCUSDC; giá Last khác giá Mark. Entry là giá vào lệnh của anh, không tự chạy theo thị trường.</p></div>
+<div class="panel" id="fundingPanel"><div class="topline"><h2>Funding realtime</h2><span id="fundingLive" class="muted">Đang tải…</span></div><div class="fundinggrid"><div class="fundingmetric"><span>Funding Rate hiện tại</span><strong id="fundingRate">—</strong></div><div class="fundingmetric"><span>Settlement tiếp theo</span><strong id="fundingTime">—</strong></div><div class="fundingmetric"><span>Countdown</span><strong id="fundingCountdown">—</strong></div><div class="fundingmetric"><span>Est. Funding · theo Mark</span><strong id="fundingEstimate">—</strong></div></div><p id="fundingStatus" class="funding-status">Funding chỉ phát sinh nếu vị thế còn mở tại thời điểm settlement. Số tiền hiển thị là ước tính theo Mark Price hiện tại.</p></div>
+<div class="panel position-card" id="positionCard">
+<div class="position-head"><div><h2 id="posSymbol">—</h2><div><span id="posSide"></span> <span id="posMode" class="muted"></span> <span id="posLeverage"></span></div><small id="posState">Mô phỏng theo dữ liệu nhập</small></div><div class="pnl-block"><span class="muted">Lời/lỗ chưa chốt (USDT)</span><strong id="posPnl">—</strong><small id="posBasis">Theo Mark Price · ROI ước tính</small></div></div>
+<div class="position-numbers"><div><span>Giá trị vị thế (USDT) · theo Mark</span><strong id="posValue">—</strong></div><div><span>Entry Price</span><strong id="posEntry">—</strong></div><div><span>Mark Price</span><strong id="posMark">—</strong></div><div><span>Est. Liq. Price · ước tính</span><strong id="posLiq">—</strong></div></div>
+<div class="position-exits"><span class="muted">TP / SL</span> <span id="posExits">—</span></div>
+<div id="liqResult" class="notice" role="status"></div><div id="posDetails" class="position-foot"></div><div id="posMessage" class="notice" role="status"></div>
+<p class="position-foot">Lời/lỗ chưa trừ phí và funding. Funding được hiển thị riêng theo rate công khai hiện tại và chỉ phát sinh nếu vị thế còn mở tại settlement. ROI = lời/lỗ ÷ (khối lượng × Entry ÷ đòn bẩy); là ước tính, có thể khác % trên sàn do ký quỹ thực tế và phí dự phòng. Giá thanh lý là mô phỏng một vị thế, không đồng bộ tài khoản sàn; các giả định được ghi ngay dưới kết quả.</p>
+</div>
+<div class="panel"><div class="topline"><h2>Phân tích kế hoạch SL / TP</h2><span id="resultState" class="muted">Lập kế hoạch</span></div><div class="metricgrid">
+<div class="metric"><span class="muted">Giá trị vị thế · USDT</span><strong id="notional">—</strong></div><div class="metric"><span class="muted">Ký quỹ ban đầu ước tính</span><strong id="margin">—</strong></div><div class="metric"><span class="muted">Số lượng tài sản cơ sở</span><strong id="quantity">—</strong></div>
+<div class="metric"><span class="muted">Lỗ tại SL sau phí · USDT</span><strong id="riskOut" class="negative">—</strong></div><div class="metric"><span class="muted">Tổng lãi TP sau phí · USDT</span><strong id="reward" class="positive">—</strong></div><div class="metric"><span class="muted">RR tổng sau phí</span><strong id="basketRR">—</strong></div></div>
+<div id="warnings" class="notice" role="status"></div><p id="positionDetails" class="status"></p></div>
+<div class="panel"><h2>Các mức thoát lệnh</h2><p class="muted">Lời/lỗ tại TP tính theo phần khối lượng phân bổ. RR và ROI tính theo biến động giá đến từng mục tiêu.</p><div class="tablewrap"><table><thead><tr><th>Mức / Tỷ lệ đóng</th><th>Giá</th><th>Biến động %</th><th>RR trước phí</th><th>ROI %*</th><th>Lời/lỗ trước phí</th><th>Lời/lỗ sau phí</th></tr></thead><tbody id="exitRows"></tbody></table></div><small>*Lời/lỗ trước phí ÷ ký quỹ ban đầu ước tính. ROI chưa trừ phí; lời/lỗ sau phí gồm phí vào và thoát lệnh. SL giả định đóng toàn bộ trước khi chạm TP.</small></div>
+
+<div class="panel"><h2>Tóm tắt thiết lập</h2><textarea id="summary" readonly aria-label="Tóm tắt thiết lập"></textarea><div class="actions"><button id="copy">Sao chép tóm tắt</button><button id="download">Tải bản tóm tắt</button><span id="copyStatus" class="muted" role="status"></span></div></div>
+<div class="panel"><details><summary>Công thức, nguồn dữ liệu & giới hạn</summary>
+<p>Nguồn bậc ký quỹ duy trì: <a href="https://bybit-exchange.github.io/docs/v5/market/risk-limit" target="_blank" rel="noopener">Bybit Risk Limit</a> · <a href="https://www.okx.com/docs-v5/en/#public-data-rest-api-get-position-tiers" target="_blank" rel="noopener">OKX Position Tiers</a>. Bybit chọn bậc theo giá trị vị thế tại giá thanh lý mô phỏng và dùng khoản khấu trừ duy trì công khai; OKX chọn bậc theo số hợp đồng, khấu trừ bằng 0 trong mô hình này. Không tự suy diễn mức MMR nếu không tải được dữ liệu.</p>
+<p>Chỉ hỗ trợ hợp đồng vĩnh cửu tuyến tính, ký quỹ và thanh toán bằng USDT. XAU và XAG phải là đúng mã hợp đồng trên sàn, không tự thay bằng vàng token hóa. Nếu sàn không niêm yết hoặc API bị chặn, vẫn có thể tính thủ công với nhãn chưa xác minh.</p>
+<p>Gọi q là số lượng tài sản cơ sở; d = +1 với Long, −1 với Short; E là Entry; X là giá thoát. Lời/lỗ trước phí = d × q × (X − E). Giá trị vị thế = q × E. Ký quỹ ban đầu ước tính = q × E ÷ đòn bẩy. Lời/lỗ sau phí = lời/lỗ trước phí − q × E × phí vào − q × X × phí thoát. Lời/lỗ và phí của mỗi TP được nhân với tỷ lệ phân bổ. RR trước phí = khoảng cách giá có lợi ÷ khoảng cách SL. Tổng lãi TP giả định mọi mục tiêu đều khớp; RR tổng sau phí = tổng lãi TP sau phí ÷ mức lỗ SL sau phí của toàn bộ vị thế.</p>
+<p>Khối lượng theo rủi ro = vốn × tỷ lệ rủi ro ÷ [khoảng cách SL + E × phí vào + giá SL × phí Taker]. Khối lượng được làm tròn xuống theo bước của sàn. Với OKX, số lượng tài sản cơ sở mỗi hợp đồng = ctVal × ctMult (hệ số trống được coi là 1), chỉ áp dụng khi ctValCcy trùng tài sản cơ sở. Chưa tự làm tròn phần khối lượng phân bổ cho từng TP.</p>
+<p>Sau khi bấm “Đã vào lệnh”, khối lượng được giữ cố định. Sửa Entry sẽ tính lại giá trị vị thế, ký quỹ, phí, rủi ro, lời/lỗ, ROI và RR. Chế độ giữ khoảng cách % sẽ dời SL/TP theo Entry; chế độ giữ giá sẽ giữ nguyên các mức SL/TP. Bấm “Sửa thiết lập” để chỉnh thông số khác. Mọi thay đổi chỉ nằm trong bảng tính, không sửa lệnh trên sàn.</p>
+<p>Giá thanh lý giải phương trình C + d×q×(P−E) = max(0,q×P×MMR−D) + q×P×f. C là vốn bảo đảm chưa cộng PnL vị thế, D là khấu trừ duy trì, f là phí Taker không âm. Cross giả định một vị thế duy nhất; Isolated dùng q×E/đòn bẩy + ký quỹ bổ sung. Đây là mô hình cân bằng ký quỹ đơn giản, không phải thuật toán thanh lý đầy đủ của sàn. Vốn tài khoản chỉ dùng để tính khối lượng và tỷ lệ rủi ro. Không suy đoán funding, trượt giá, lịch sử khớp từng phần hay hạng tài khoản.</p>
+<p>Đòn bẩy công khai là mức trần của hợp đồng, không đảm bảo tài khoản hoặc quy mô vị thế được dùng mức đó. Thông số được tải khi đổi sàn/cặp hoặc bấm cập nhật; giá ưu tiên kết nối WebSocket liên tục; khi mất kết nối, chuyển sang lấy giá mỗi 3 giây và hiện rõ chế độ dự phòng. Funding lấy từ public WebSocket của sàn và có REST fallback; số tiền funding ước tính = giá trị vị thế theo Mark × funding rate, đổi dấu theo Long/Short. Funding không được tự cộng vào TP/SL vì chỉ phát sinh nếu vị thế còn mở tại đúng thời điểm settlement. Yêu cầu hết hạn sau 8 giây. Nếu mất mạng, bị chặn CORS hoặc khu vực, vẫn tính thủ công được. Không dùng khóa API, thư viện ngoài hay chức năng đặt lệnh. Dữ liệu nhập chỉ ở trong trang và không được lưu qua lần tải lại. Ô nhập dùng dấu chấm cho phần thập phân; kết quả dùng dấu phẩy ngăn hàng nghìn.</p>
+<p>Tài liệu kiểm tra ngày 25/09/2026: <a href="https://bybit-exchange.github.io/docs/v5/market/instrument" target="_blank" rel="noopener">Thông số Bybit</a> · <a href="https://bybit-exchange.github.io/docs/v5/market/tickers" target="_blank" rel="noopener">Giá Bybit</a> · <a href="https://www.okx.com/docs-v5/en/" target="_blank" rel="noopener">API công khai OKX V5</a> · <a href="https://www.bybit.com/en/help-center/article/Profit-Loss-calculations-USDT-Contract" target="_blank" rel="noopener">Công thức lời/lỗ Bybit</a> · <a href="https://www.okx.com/en-sg/help/futures-pnl-calculation-rules" target="_blank" rel="noopener">Công thức lời/lỗ OKX</a></p></details></div>
+</section></div><footer>Bảng tính độc lập · Không đăng nhập hay đặt lệnh trên sàn</footer></main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id), n=id=>$(id).value.trim()===''?NaN:Number($(id).value),fmt=(x,d=2)=>Number.isFinite(x)?x.toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d}):'—';
+const symbols=['BTC','ETH','XAU','XAG','SOL','XRP','BNB','DOGE','ADA','AVAX','LINK','DOT','LTC','BCH','SUI','APT','ARB','OP','NEAR','UNI','HYPE','ZEC','LDO','WLD','ZEN'];
+symbols.forEach(s=>$('symbol').add(new Option(s+' / USDT',s)));
+let riskTiers=[],riskState='Đang tải bậc rủi ro…',riskVersion=0;
+let meta=null,metaMessage='',quote=null,quoteAt=0,locked=false,filledQty=0,generation=0,lastAnchor='relative',lastResult=null;
+const idFor=()=> $('exchange').value==='bybit'?$('symbol').value+'USDT':$('symbol').value+'-USDT-SWAP';
+const tradeInputs=[...document.querySelectorAll('.setup input,.setup select')];
+const customFees={};
+function syncFees(apply=false){
+ const ex=$('exchange').value,custom=customFees[ex];
+ if(apply){$('feePreset').value=custom?'custom':'reference';$('maker').value=custom?custom.maker:'0.02';$('taker').value=custom?custom.taker:(ex==='bybit'?'0.055':'0.05');}
+ $('feeSource').textContent=$('feePreset').value==='reference'?(ex==='bybit'?'Tham khảo Bybit VIP 0: Maker 0,02% · Taker 0,055%.':'Tham khảo OKX mức cơ bản: Maker 0,02% · Taker 0,05%.')+' Chưa xác minh mức phí tài khoản anh.':'Đang dùng mức phí anh tự nhập cho '+$('exchange').selectedOptions[0].text+'.';
+}
+function rates(){return {entry:n($('order').value==='Market'?'taker':$('fillFee').value),exit:n($('tpFee').value),stop:n('taker')}}
+function calculate(v){
+ const {E,L,d,stop,tps,weights,entryFee,exitFee,stopFee}=v;
+ const riskUnit=d*(E-stop)+E*entryFee+stop*stopFee;
+ let q=v.lockedQty??(v.mode==='quantity'?v.size:v.mode==='margin'?v.size*L/E:v.mode==='notional'?v.size/E:v.equity*v.size/100/riskUnit);
+ if(v.lockedQty==null&&v.step>0)q=Math.floor((q+v.step*1e-9)/v.step)*v.step;
+ const notional=q*E,margin=notional/L;
+ const row=(X,w,f)=>{let gross=d*q*(X-E)*w,fees=q*w*(E*entryFee+X*f);return {X,w,gross,fees,net:gross-fees,move:d*(X-E)/E*100,rr:d*(X-E)/(d*(E-stop)),roi:d*(X-E)/E*L*100}};
+ const sl=row(stop,1,stopFee),targets=tps.map((x,i)=>row(x,weights[i]/100,exitFee));
+ return {q,notional,margin,sl,targets,risk:-sl.net,reward:targets.reduce((a,x)=>a+x.net,0)};
+}
+function getValues(){const E=n('entry'),d=n('side'),relative=$('anchor').value==='relative',f=rates();return {E,d,L:n('leverage'),stop:relative?E*(1-d*n('stop')/100):n('stop'),tps:[1,2,3].map(i=>relative?E*(1+d*n('tp'+i)/100):n('tp'+i)),weights:[1,2,3].map(i=>n('weight'+i)),entryFee:f.entry/100,exitFee:f.exit/100,stopFee:f.stop/100,mode:$('sizing').value,size:n('size'),equity:n('equity'),step:meta?.step||0,lockedQty:locked?filledQty:null}}
+function positionMath(v,mark,last,source){
+ if(!(v.E>0&&v.L>=1&&v.size>0))return null;
+ let q=v.lockedQty;
+ if(q==null){
+  if(v.mode==='risk'){
+   if(!(v.equity>0&&v.stop>0&&v.d*(v.E-v.stop)>0))return null;
+   const loss=v.d*(v.E-v.stop)+v.E*v.entryFee+v.stop*v.stopFee;
+   if(!(loss>0))return null;q=v.equity*v.size/100/loss;
+  }else q=v.mode==='quantity'?v.size:v.mode==='margin'?v.size*v.L/v.E:v.size/v.E;
+  if(v.step>0)q=Math.floor((q+v.step*1e-9)/v.step)*v.step;
+ }
+ if(!(q>0&&Number.isFinite(q)))return null;
+ const margin=q*v.E/v.L,px=source==='mark'?mark:last;
+ const pnl=px>0?v.d*q*(px-v.E):NaN;
+ return {q,margin,pnl,roi:pnl/margin*100,value:mark>0?q*mark:NaN};
+}
+// Solve equity = maintenance + estimated closing fee within a constant risk tier.
+function liquidationRoot(E,q,d,C,m,D,f){
+ if(![E,q,d,C,m,D,f].every(Number.isFinite)||E<=0||q<=0||C<0||m<0||m>=1||D<0||f<0||m+f>=1)return NaN;
+ const P=(d*q*E-C-D)/(q*(d-m-f));
+ if(P>0&&q*P*m>=D-1e-7)return P;
+ const noMaintenance=(d*q*E-C)/(q*(d-f));
+ if(noMaintenance>0&&q*noMaintenance*m<=D+1e-7)return noMaintenance;
+ return NaN;
+}
+function liquidationEstimate(v,r,mode,C,tiers,manual,fee){
+ if(!r||!(C>=0&&Number.isFinite(C)))return {error:'Vốn bảo đảm phải là số không âm.'};
+ const candidates=manual?[manual]:tiers;
+ if(!candidates.length)return {error:'Chưa có bậc rủi ro. Chờ API hoặc chọn thông số mô phỏng nhập tay.'};
+ if(v.d===1&&C>=r.q*v.E)return {error:'Không có ngưỡng thanh lý dương trong mô hình này; không có nghĩa tài khoản thực tế miễn thanh lý.'};
+ for(const t of candidates){
+  const P=liquidationRoot(v.E,r.q,v.d,C,t.m,t.D,fee);
+  if(!(P>0))continue;
+  const exposure=t.kind==='contracts'?r.q/(meta?.unit||NaN):r.q*P;
+  if(t.kind!=='manual'&&!(exposure>=t.min-1e-7&&exposure<=t.max+1e-7))continue;
+  return {P,t,C};
+ }
+ return {error:'Không tìm được mức thanh lý hợp lệ trong các bậc đã tải. Kiểm tra vốn, khối lượng hoặc nhập bậc rủi ro thủ công.'};
+}
+function renderLiquidation(v,r){
+ const cross=$('marginMode').value==='Cross',manual=$('liqSource').value==='manual';
+ $('liqCollateral').disabled=locked||!cross;$('liqExtra').disabled=locked||cross;
+ $('liqMmr').disabled=locked||!manual;$('liqDeduction').disabled=locked||!manual;
+ $('liqSourceStatus').textContent=manual?'Đang dùng MMR và khấu trừ nhập tay.':riskState;
+ const C=cross?($('liqCollateral').value.trim()===''?v.equity:n('liqCollateral')):(r?.margin+n('liqExtra'));
+ const t=manual?{m:n('liqMmr')/100,D:n('liqDeduction'),kind:'manual',label:'nhập tay'}:null;
+ const out=!cross&&!(n('liqExtra')>=0)?{error:'Ký quỹ bổ sung phải không âm.'}:r?liquidationEstimate(v,r,cross?'Cross':'Isolated',C,riskTiers,t,Math.max(0,v.stopFee)):{error:'Cần Entry, đòn bẩy và khối lượng hợp lệ.'};
+ $('posLiq').textContent=out.P?'≈ '+fmt(out.P,6):'—';
+ let note=out.error||`${cross?'Cross · giả định chỉ một vị thế':'Isolated · mô hình đơn giản'} · vốn bảo đảm ${fmt(C)} USDT · MMR ${fmt(out.t.m*100,4)}% · khấu trừ ${fmt(out.t.D)} USDT · phí đóng giả định ${fmt(Math.max(0,v.stopFee)*100,4)}% · bậc ${out.t.label}.`;
+ if(out.P){
+  if(v.d*(v.E-out.P)<=0)note+=' Vốn giả định không đủ duy trì vị thế tại Entry.';
+  if(markValue>0&&Date.now()-markReceived<15000&&v.d*(markValue-out.P)<=0)note+=' Mark hiện tại đã vượt ngưỡng mô phỏng.';
+  if(v.stop>0&&v.d*(v.E-v.stop)>0&&v.d*(v.stop-out.P)<=0)note+=' SL nằm sau ngưỡng thanh lý mô phỏng.';
+ }
+ $('liqResult').textContent=note;
+ return out;
+}
+async function loadRisk(gen=generation){
+ const version=++riskVersion,bybit=$('exchange').value==='bybit',id=idFor(),family=$('symbol').value+'-USDT',mode=$('marginMode').value.toLowerCase();
+ riskTiers=[];riskState='Đang tải bậc rủi ro từ sàn…';
+ try{
+  let data=await request(bybit?'https://api.bybit.com/v5/market/risk-limit?category=linear&symbol='+id:'https://www.okx.com/api/v5/public/position-tiers?instType=SWAP&tdMode='+mode+'&instFamily='+family);
+  if(gen!==generation||version!==riskVersion)return;
+  if(bybit?data.retCode!==0:data.code!=='0')throw Error('API từ chối');
+  let rows=bybit?data.result?.list:data.data;
+  if(bybit){
+   rows=rows.filter(x=>x.symbol===id).sort((a,b)=>+a.riskLimitValue-+b.riskLimitValue);
+   riskTiers=rows.map((x,i)=>({min:i?+rows[i-1].riskLimitValue:0,max:+x.riskLimitValue,m:(+x.maintenanceMargin)/100,D:x.mmDeduction===''?(i===0?0:NaN):+x.mmDeduction,kind:'notional',label:String(x.id)}));
+  }else riskTiers=rows.filter(x=>x.instFamily===family||x.uly===family).map(x=>({min:+x.minSz,max:+x.maxSz,m:+x.mmr,D:0,kind:'contracts',label:String(x.tier)}));
+  riskTiers=riskTiers.filter(t=>t.max>t.min&&t.m>=0&&t.m<1&&Number.isFinite(t.D));
+  if(!riskTiers.length)throw Error('Không có bậc hợp lệ');
+  riskState='Đã tải '+riskTiers.length+' bậc từ '+(bybit?'Bybit':'OKX')+' · '+new Date().toLocaleTimeString('vi-VN')+'. Tự chọn bậc theo quy mô vị thế tại ngưỡng mô phỏng.';
+ }catch{if(gen!==generation||version!==riskVersion)return;riskTiers=[];riskState='Không lấy được bậc rủi ro. Chọn nhập tay nếu muốn mô phỏng; không tự dùng MMR mẫu.';}
+ render();
+}
+function renderPosition(){
+ const v=getValues(),freshMark=Date.now()-markReceived<15000?markValue:NaN;
+ const freshLast=quoteIsFresh()?quote:NaN,source=$('pnlSource').value;
+ const r=positionMath(v,freshMark,freshLast,source);
+ $('posSymbol').textContent=idFor();$('posSide').textContent=v.d===1?'Long':'Short';$('posSide').className=v.d===1?'positive':'negative';
+ $('posMode').textContent=$('marginMode').value;$('posLeverage').textContent=fmt(v.L,0)+'×';
+ $('posState').textContent=locked?'Đã ghi nhận · khối lượng cố định':'Mô phỏng kế hoạch · chưa ghi nhận lệnh';
+ $('posEntry').textContent=v.E>0?fmt(v.E,6):'—';$('posMark').textContent=freshMark>0?fmt(freshMark,6):'—';
+ $('posValue').textContent=fmt(r?.value,2);
+ $('posPnl').textContent=r&&Number.isFinite(r.pnl)?`${fmt(r.pnl)} (${fmt(r.roi)}%)`:'—';
+ $('posPnl').className=r?.pnl<0?'negative':'positive';
+ $('posBasis').textContent='Theo '+(source==='mark'?'Mark Price':'Last Price')+' · ROI ước tính';
+ $('posDetails').textContent=r?`Khối lượng: ${fmt(r.q,8)} ${$('symbol').value} · Ký quỹ ban đầu ước tính: ${fmt(r.margin)} USDT`:'';
+ const validSL=v.stop>0&&v.d*(v.E-v.stop)>0;
+ $('posExits').textContent=v.tps.map((x,i)=>`TP${i+1}: ${x>0?fmt(x,6):'—'}${!(x>0&&v.d*(x-v.E)>0)?' (chưa hợp lệ)':''}`).join(' · ')+` / SL: ${v.stop>0?fmt(v.stop,6):'—'}${validSL?'':' (chưa hợp lệ)'}`;
+ const notes=[];
+ if(!r)notes.push(v.mode==='risk'?'Cần SL hợp lệ để suy ra khối lượng theo rủi ro.':'Nhập Entry, đòn bẩy và khối lượng hợp lệ để tính vị thế.');
+ if(r&&(!Number.isFinite(r.pnl)||!(freshMark>0)))notes.push('Đang chờ giá mới từ sàn; giá thiếu hoặc quá cũ sẽ không được dùng để tính.');
+ if(!validSL)notes.push('SL chưa hợp lệ; các số vị thế ở trên vẫn tính độc lập với SL (trừ cách tính khối lượng theo rủi ro).');
+ if(!meta)notes.push('Chưa xác minh thông số hợp đồng từ sàn.');
+ $('posMessage').textContent=notes.join('\n');renderLiquidation(v,r);displayFunding();
+}
+function render(){
+ const v=getValues(),errors=[],notes=[];const max=$('override').checked||!meta?.max?n('manualMax'):meta.max;
+ if(!(v.E>0))errors.push('Giá Entry phải lớn hơn 0.');
+ if(!(v.L>=1&&v.L<=max&&max<=1000))errors.push('Đòn bẩy phải từ 1 đến giới hạn đã chọn ('+fmt(max,2)+'×).');
+ if(!(v.equity>0&&v.size>0))errors.push('Vốn dành cho futures và giá trị khối lượng phải lớn hơn 0.');
+ if(!(v.stop>0&&v.d*(v.E-v.stop)>0))errors.push(v.d===1?`Lệnh Long: SL (${fmt(v.stop,6)}) phải thấp hơn Entry (${fmt(v.E,6)}).`:`Lệnh Short: SL (${fmt(v.stop,6)}) phải cao hơn Entry (${fmt(v.E,6)}).`);
+ if(v.tps.some(x=>!(x>0&&v.d*(x-v.E)>0)))errors.push('Các mức TP phải nằm về phía có lãi so với Entry.');
+ if(v.tps.some((x,i)=>i>0&&v.d*(x-v.tps[i-1])<=0))errors.push('Các mục tiêu phải xa dần Entry theo thứ tự TP1, TP2, TP3.');
+ if(v.weights.some(x=>!Number.isFinite(x)||x<0||x>100)||Math.abs(v.weights.reduce((a,b)=>a+b,0)-100)>1e-6)errors.push('Tổng tỷ lệ đóng tại các TP phải bằng 100%.');
+ if([v.entryFee,v.exitFee,v.stopFee].some(x=>!Number.isFinite(x)||Math.abs(x)>.01))errors.push('Mức phí phải nằm trong khoảng −1% đến 1%.');
+ if(!meta)notes.push('Tính thủ công: chưa xác minh tình trạng niêm yết, bước khối lượng và đòn bẩy.');
+ if($('override').checked)notes.push('Đang dùng giới hạn đòn bẩy nhập tay; kiểm tra mức được phép trên sàn.');
+ let r=errors.length?null:calculate(v);
+ if(r&&(!(r.q>0)||!Number.isFinite(r.q)||!(r.risk>0))){errors.push('Khối lượng hoặc rủi ro SL sau phí không hợp lệ; kiểm tra bước khối lượng, phí và dữ liệu nhập.');r=null;}
+ if(r&&meta?.min&&r.q<meta.min){errors.push('Khối lượng thấp hơn mức tối thiểu của sàn.');r=null;}
+ if(r){
+ if(r.margin+v.E*r.q*v.entryFee>v.equity)notes.push('Ký quỹ ước tính cộng phí vào lệnh vượt phần vốn dành cho futures.');
+ if(r.risk>r.margin)notes.push('Lỗ tại SL vượt ký quỹ ban đầu; có thể bị thanh lý trước khi chạm SL.');
+ if(meta?.maxQty&&r.q>meta.maxQty)notes.push('Khối lượng vượt giới hạn mỗi lệnh theo dữ liệu sàn.');
+ if(meta?.tick&&[v.E,v.stop,...v.tps].some(x=>Math.abs(x/meta.tick-Math.round(x/meta.tick))>1e-5))notes.push('Một số giá chưa đúng bước giá của sàn; giá thoát lệnh là kết quả tính toán, chưa làm tròn.');
+ if(meta?.step&&r.targets.some(t=>t.w>0&&Math.abs(r.q*t.w/meta.step-Math.round(r.q*t.w/meta.step))>1e-6))notes.push('Khối lượng đóng tại từng TP có thể cần làm tròn theo bước của sàn.');
+ }
+ lastResult=r;$('lock').disabled=!r;
+ $('lockFeedback').hidden=locked||!!r;
+ $('lockFeedback').textContent=r?'':('Chưa thể khóa thiết lập:\n'+errors.join('\n')+($('anchor').value==='absolute'?'\nĐang giữ giá SL/TP cố định: đổi Entry sẽ không tự dời các mức này.':''));
+ $('lock').setAttribute('aria-describedby','lockFeedback modeHint');$('download').disabled=!r;$('copy').disabled=!r;
+ for(const [id,val,dec] of [['notional',r?.notional,2],['margin',r?.margin,2],['quantity',r?.q,8],['riskOut',r?.risk,2],['reward',r?.reward,2],['basketRR',r?r.reward/r.risk:NaN,2]])$(id).textContent=fmt(val,dec);
+ $('warnings').textContent=[...errors,...notes].join('\n');
+ $('positionDetails').textContent=r?`Rủi ro SL: ${fmt(r.risk/v.equity*100)}% vốn · Phí vào lệnh: ${fmt(r.q*v.E*v.entryFee)} USDT · Giá hòa vốn sau phí (thoát Taker): ${fmt(v.E*(v.d+v.entryFee)/(v.d-v.stopFee),6)}${meta?.unit?' · Số hợp đồng OKX: '+fmt(r.q/meta.unit,6):''}`:'';
+ $('exitRows').innerHTML=r?[{...r.sl,name:'SL / 100%'},...r.targets.map((x,i)=>({...x,name:'TP'+(i+1)+' / '+fmt(x.w*100,0)+'%'}))].map(t=>`<tr><td>${t.name}</td><td>${fmt(t.X,6)}</td><td class="${t.move<0?'negative':'positive'}">${fmt(t.move)}</td><td>${t.name.startsWith('SL')?'—':fmt(t.rr)}</td><td>${fmt(t.roi)}</td><td>${fmt(t.gross)}</td><td class="${t.net<0?'negative':'positive'}">${fmt(t.net)}</td></tr>`).join(''):'<tr><td colspan="7">Nhập thiết lập hợp lệ để xem kết quả.</td></tr>';
+ $('summary').value=r?`${locked?'ĐÃ VÀO LỆNH':'KẾ HOẠCH'} · ${$('exchange').selectedOptions[0].text} · ${idFor()} · ${v.d===1?'LONG':'SHORT'} · ${$('order').value}\nEntry ${fmt(v.E,8)} | Đòn bẩy ${fmt(v.L)}× | Số lượng ${fmt(r.q,8)} đơn vị cơ sở\nGiá trị vị thế ${fmt(r.notional)} USDT | Ký quỹ ước tính ${fmt(r.margin)} USDT\nSL ${fmt(v.stop,8)} | Lỗ sau phí ${fmt(r.risk)} USDT (${fmt(r.risk/v.equity*100)}% vốn)\n${r.targets.map((t,i)=>`TP${i+1} ${fmt(t.X,8)} | Đóng ${fmt(t.w*100,0)}% | RR ${fmt(t.rr)} | Sau phí ${fmt(t.net)} USDT`).join('\n')}\nTổng lãi TP sau phí ${fmt(r.reward)} USDT | RR sau phí ${fmt(r.reward/r.risk)}\n${$('anchor').selectedOptions[0].text}. ${locked?'Giữ nguyên khối lượng đã khớp.':'Khối lượng kế hoạch được tính lại.'}\nNguồn phí: ${$('feePreset').selectedOptions[0].text}. Phí vào lệnh ${fmt(v.entryFee*100,4)}%, TP ${fmt(v.exitFee*100,4)}%, SL ${fmt(v.stopFee*100,4)}%. Chưa gồm funding/trượt giá. Giá thanh lý chỉ là mô phỏng một vị thế.\n${meta?'Đã tải thông số công khai từ sàn; giới hạn tài khoản có thể khác.':'NHẬP TAY / CHƯA XÁC MINH thông số hợp đồng.'}`:'Thiết lập không hợp lệ — xem thông báo phía trên.';
+ if(r&&Number.isFinite(fundingRateValue)){const fm=Date.now()-markReceived<15000?markValue:NaN,fr=positionMath(v,fm,quoteIsFresh()?quote:NaN,'mark'),est=fr&&fm>0?-v.d*fr.value*fundingRateValue:NaN;$('summary').value+=`\nFunding hiện tại ${fmt(fundingRateValue*100,6)}%${fundingSettlement>0?' · settlement '+new Date(fundingSettlement).toLocaleString('vi-VN'):''}${Number.isFinite(est)?' · est. '+(est>=0?'+':'')+fmt(est,4)+' USDT nếu giữ qua settlement':''}. Không tự cộng funding vào TP/SL.`;}
+ $('fillFee').disabled=locked||$('order').value==='Market';$('manualMax').disabled=locked||!!(meta?.max&&!$('override').checked);
+ $('usePrice').disabled=locked||!quote||Date.now()-quoteReceived>15000;renderPosition();if(r)$('summary').value+='\nEst. Liq. Price (mô phỏng): '+$('posLiq').textContent+'\n'+$('liqResult').textContent;
+}
+function setLock(on){locked=on;if(on)filledQty=lastResult.q;tradeInputs.forEach(el=>el.disabled=on&&el.id!=='entry');$('lock').hidden=on;$('unlock').hidden=!on;$('modeLabel').textContent=on?'Chỉ sửa Entry':'Lập kế hoạch';$('resultState').textContent=on?'Đã khóa khối lượng':'Lập kế hoạch';$('modeHint').textContent=on?'Chỉ Entry được chỉnh sửa. Khối lượng đã khớp giữ nguyên; mọi kết quả liên quan cập nhật ngay.':'Bấm “Đã vào lệnh” để khóa khối lượng và thiết lập, chỉ cho sửa Entry. Công cụ không gửi lệnh lên sàn.';render();}
+function convertAnchor(){const E=n('entry'),d=n('side');if(!(E>0)){ $('anchor').value=lastAnchor;return;}const rel=lastAnchor==='relative';['stop','tp1','tp2','tp3'].forEach(id=>{const sign=id==='stop'?-d:d;$(id).value=Number((rel?E*(1+sign*n(id)/100):sign*(n(id)/E-1)*100).toPrecision(12));});lastAnchor=$('anchor').value;['stop','tp1','tp2','tp3'].forEach(id=>$(id+'Label').firstChild.textContent=(id==='stop'?'SL':id.toUpperCase())+(lastAnchor==='relative'?' · Khoảng cách %':' · Giá USDT'));render();}
+async function request(url){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);try{const res=await fetch(url,{signal:controller.signal,credentials:'omit'});if(!res.ok)throw Error('HTTP '+res.status);return await res.json();}finally{clearTimeout(timer)}}
+async function metadata(gen){const bybit=$('exchange').value==='bybit',id=idFor(),base=$('symbol').value;try{
+ const data=await request(bybit?'https://api.bybit.com/v5/market/instruments-info?category=linear&symbol='+id:'https://www.okx.com/api/v5/public/instruments?instType=SWAP&instId='+id);
+ if(gen!==generation)return;if(bybit?data.retCode!==0:data.code!=='0')throw Error('Sàn từ chối yêu cầu thông số hợp đồng');const x=(bybit?data.result?.list:data.data)?.find(x=>(bybit?x.symbol:x.instId)===id);
+ if(!x)throw Error('Không tìm thấy đúng mã hợp đồng này trên sàn');
+ if(bybit){if(x.contractType!=='LinearPerpetual'||x.settleCoin!=='USDT'||x.status!=='Trading')throw Error('Hợp đồng không phải loại vĩnh cửu USDT tuyến tính đang hoạt động');meta={max:+x.leverageFilter?.maxLeverage,tick:+x.priceFilter?.tickSize,step:+x.lotSizeFilter?.qtyStep,min:+x.lotSizeFilter?.minOrderQty,maxLimit:+x.lotSizeFilter?.maxOrderQty,maxMarket:+x.lotSizeFilter?.maxMktOrderQty};}
+ else{if(x.ctType!=='linear'||x.settleCcy!=='USDT'||x.state!=='live'||x.ctValCcy!==base)throw Error('Loại hợp đồng chưa được hỗ trợ hoặc đang ngừng hoạt động');const unit=+x.ctVal*(x.ctMult?+x.ctMult:1);if(!(unit>0))throw Error('Giá trị hợp đồng không hợp lệ');meta={max:+x.lever,tick:+x.tickSz,step:+x.lotSz*unit,min:+x.minSz*unit,unit,maxLimit:+x.maxLmtSz*unit,maxMarket:+x.maxMktSz*unit};}
+ meta.maxQty=$('order').value==='Market'?meta.maxMarket:meta.maxLimit;
+ metaMessage=`Đã xác minh thông số sàn · tối đa ${fmt(meta.max)}× · bước giá ${meta.tick} · bước khối lượng ${meta.step}. ${new Date().toLocaleTimeString()}`;
+ }catch(e){if(gen!==generation)return;meta=null;metaMessage='Chuyển sang nhập tay · '+(e.name==='AbortError'?'Hết thời gian chờ':e instanceof TypeError?'Không kết nối được API (mạng hoặc CORS)':e.message)+'. Chưa xác minh niêm yết và đòn bẩy; dùng giới hạn nhập tay.';}
+ if(gen===generation){$('metadata').textContent=metaMessage;render();}
+}
+// Quote state is separate from Entry and calculator state.
+let feed=null, quoteReceived=0, quoteSource='', quoteDetails={},markValue=NaN,markReceived=0;
+let fundingRateValue=NaN,fundingSettlement=0,fundingNextTime=0,fundingIntervalHours=NaN,fundingReceived=0,fundingSource='';
+function quoteIsFresh(){return quote>0&&Date.now()-quoteReceived<15000;}
+function fundingIsFresh(){return Number.isFinite(fundingRateValue)&&fundingReceived>0&&Date.now()-fundingReceived<180000;}
+function clockLeft(ms){
+ if(!(ms>0))return '—';
+ const total=Math.max(0,Math.floor(ms/1000)),h=Math.floor(total/3600),m=Math.floor(total%3600/60),sec=total%60;
+ return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+function acceptFunding(f,x,source){
+ if(feed!==f||f.gen!==generation||!x)return;
+ const rate=+x.fundingRate;
+ if(!Number.isFinite(rate))return;
+ let settlement=0,next=0,interval=NaN;
+ if(f.bybit){
+  settlement=+x.nextFundingTime||0;next=settlement;
+  interval=+x.fundingIntervalHour;
+ }else{
+  settlement=+x.fundingTime||0;next=+x.nextFundingTime||0;
+  const prev=+x.prevFundingTime||0;
+  if(next>settlement)interval=(next-settlement)/3600000;
+  else if(settlement>prev)interval=(settlement-prev)/3600000;
+ }
+ fundingRateValue=rate;fundingSettlement=settlement;fundingNextTime=next;fundingIntervalHours=interval;fundingReceived=Date.now();fundingSource=source;
+ displayFunding();
+}
+function displayFunding(){
+ const fresh=fundingIsFresh(),age=fundingReceived?Math.max(0,Math.floor((Date.now()-fundingReceived)/1000)):0;
+ $('fundingRate').textContent=Number.isFinite(fundingRateValue)?fmt(fundingRateValue*100,6)+'%':'—';
+ const rateEl=$('fundingRate');if(rateEl)rateEl.className='';
+ $('fundingTime').textContent=fundingSettlement>0?new Date(fundingSettlement).toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'—';
+ $('fundingCountdown').textContent=fundingSettlement>Date.now()?clockLeft(fundingSettlement-Date.now()):fundingSettlement>0?'00:00:00':'—';
+ const v=getValues(),freshMark=Date.now()-markReceived<15000?markValue:NaN,r=positionMath(v,freshMark,quoteIsFresh()?quote:NaN,'mark');
+ let estimate=NaN;
+ if(r&&freshMark>0&&Number.isFinite(fundingRateValue))estimate=-v.d*r.value*fundingRateValue;
+ $('fundingEstimate').textContent=Number.isFinite(estimate)?`${estimate>=0?'+':''}${fmt(estimate,4)} USDT`:'—';
+ $('fundingEstimate').className=Number.isFinite(estimate)?(estimate>=0?'positive':'negative'):'';
+ const interval=Number.isFinite(fundingIntervalHours)&&fundingIntervalHours>0?` · chu kỳ ~${fmt(fundingIntervalHours,0)}h`:'';
+ $('fundingLive').textContent=fundingReceived?(fresh?(fundingSource==='ws'?'TRỰC TIẾP · WebSocket':'DỰ PHÒNG · REST'):'DỮ LIỆU FUNDING ĐÃ CŨ'):'Đang tải…';
+ $('fundingStatus').textContent=fundingReceived?`Cập nhật ${age} giây trước${interval}. ${Number.isFinite(estimate)?(estimate<0?'Ước tính anh trả ':'Ước tính anh nhận ')+fmt(Math.abs(estimate),4)+' USDT nếu giữ vị thế qua settlement.':'Cần Mark Price và vị thế hợp lệ để ước tính số tiền.'}`:'Đang chờ funding rate công khai từ sàn. Funding không được tự cộng vào TP/SL.';
+}
+function displayQuote(){
+ const age=Math.max(0,Math.floor((Date.now()-quoteReceived)/1000));
+ const fresh=quoteIsFresh();
+ $('quote').textContent=quote?fmt(quote,Math.max(2,meta?.tick?Math.min(8,Math.ceil(-Math.log10(meta.tick))):6)):'—';
+ $('quoteStatus').textContent=quote?`${fresh?(quoteSource==='ws'?'TRỰC TIẾP · WebSocket':'DỰ PHÒNG · lấy giá mỗi 3 giây'):'GIÁ ĐÃ CŨ · không dùng để lấy Entry'} · nhận ${age} giây trước · thời gian sàn ${new Date(quoteAt).toLocaleTimeString('vi-VN')}`:'Đang chờ giá mới; có thể nhập Entry thủ công.';
+ const parts=[];
+ if(quoteDetails.mark>0)parts.push('Mark: '+fmt(quoteDetails.mark,4));
+ if(quoteDetails.bid>0)parts.push('Bid: '+fmt(quoteDetails.bid,4));
+ if(quoteDetails.ask>0)parts.push('Ask: '+fmt(quoteDetails.ask,4));
+ $('quoteCompare').textContent=parts.join(' · ');
+ $('usePrice').disabled=locked||!fresh;renderPosition();
+}
+function acceptQuote(f,x,time,source){
+ if(feed!==f||f.gen!==generation||!x)return;
+ const value=+(f.bybit?x.lastPrice:x.last), ts=+time;
+ if(!(value>0&&ts>0)||Date.now()-ts>60000||ts<quoteAt)return;
+ quote=value;quoteAt=ts;quoteReceived=Date.now();quoteSource=source;
+ if(+x.markPrice>0){markValue=+x.markPrice;markReceived=Date.now();}
+ quoteDetails={mark:markValue||0,bid:+(f.bybit?x.bid1Price:x.bidPx)||0,ask:+(f.bybit?x.ask1Price:x.askPx)||0};
+ if(f.bybit&&x.fundingRate!==undefined)acceptFunding(f,x,source);
+ displayQuote();
+}
+async function price(f=feed){
+ if(!f||f!==feed||f.busy)return;
+ if(quoteSource==='ws'&&quoteIsFresh())return;
+ f.busy=true;
+ try{
+  const data=await request(f.bybit?'https://api.bybit.com/v5/market/tickers?category=linear&symbol='+f.id:'https://www.okx.com/api/v5/market/ticker?instId='+f.id);
+  if(feed!==f)return;
+  if(f.bybit?data.retCode!==0:data.code!=='0')throw Error('Không có giá');
+  if(quoteSource==='ws'&&quoteIsFresh())return;
+  const x=(f.bybit?data.result?.list:data.data)?.find(x=>(f.bybit?x.symbol:x.instId)===f.id);
+  acceptQuote(f,x,f.bybit?data.time:x?.ts,'rest');
+ }catch{
+  if(feed===f&&!quoteIsFresh())$('quoteStatus').textContent='Không nhận được giá mới · kiểm tra kết nối hoặc nhập Entry thủ công.';
+ }finally{f.busy=false;}
+}
+async function refreshMark(f=feed){
+ if(!f||f!==feed||f.bybit||f.markBusy||Date.now()-markReceived<10000)return;
+ f.markBusy=true;
+ try{const data=await request('https://www.okx.com/api/v5/public/mark-price?instType=SWAP&instId='+f.id);
+ const x=data.data?.find(x=>x.instId===f.id);
+ if(feed===f&&data.code==='0'&&+x?.markPx>0&&Date.now()-Number(x.ts)<60000&&Date.now()-markReceived>=10000){markValue=+x.markPx;markReceived=Date.now();displayQuote();}
+ }catch{}finally{f.markBusy=false;}
+}
+async function refreshFunding(f=feed,force=false){
+ if(!f||f!==feed||f.fundingBusy)return;
+ if(!force&&fundingSource==='ws'&&fundingIsFresh())return;
+ if(!force&&f.fundingLastFetch&&Date.now()-f.fundingLastFetch<30000)return;
+ f.fundingBusy=true;f.fundingLastFetch=Date.now();
+ try{
+  if(f.bybit){
+   const data=await request('https://api.bybit.com/v5/market/tickers?category=linear&symbol='+f.id);
+   if(feed!==f||data.retCode!==0)return;
+   if(fundingSource==='ws'&&fundingIsFresh())return;
+   const x=data.result?.list?.find(x=>x.symbol===f.id);if(x)acceptFunding(f,x,'rest');
+  }else{
+   const data=await request('https://www.okx.com/api/v5/public/funding-rate?instId='+f.id);
+   if(feed!==f||data.code!=='0')return;
+   if(fundingSource==='ws'&&fundingIsFresh())return;
+   const x=data.data?.find(x=>x.instId===f.id);if(x)acceptFunding(f,x,'rest');
+  }
+ }catch{}finally{f.fundingBusy=false;}
+}
+function connectStream(f){
+ if(feed!==f)return;
+ let ws;
+ try{ws=new WebSocket(f.bybit?'wss://stream.bybit.com/v5/public/linear':'wss://ws.okx.com:8443/ws/v5/public');}
+ catch{f.retry=setTimeout(()=>connectStream(f),10000);return;}
+ f.ws=ws;f.snapshot={};
+ const connectionTimer=setTimeout(()=>{if(ws.readyState!==WebSocket.OPEN)ws.close();},8000);
+ ws.onopen=()=>{
+  clearTimeout(connectionTimer);
+  if(feed!==f){ws.close();return;}
+  ws.send(JSON.stringify({op:'subscribe',args:f.bybit?['tickers.'+f.id]:[{channel:'tickers',instId:f.id},{channel:'mark-price',instId:f.id},{channel:'funding-rate',instId:f.id}]}));
+  f.heartbeat=setInterval(()=>{if(ws.readyState===WebSocket.OPEN)ws.send(f.bybit?JSON.stringify({op:'ping'}):'ping');},20000);
+ };
+ ws.onmessage=event=>{
+  if(feed!==f||event.data==='pong')return;
+  let msg;try{msg=JSON.parse(event.data);}catch{return;}
+  if(msg.success===false||msg.event==='error'){ws.close();return;}
+  if(f.bybit){
+   if(msg.topic!=='tickers.'+f.id||!msg.data)return;
+   // Bybit deltas omit unchanged fields; retain the most recent snapshot.
+   f.snapshot=msg.type==='snapshot'?{...msg.data}:{...f.snapshot,...msg.data};
+   acceptQuote(f,f.snapshot,msg.ts,'ws');
+  }else if(msg.arg?.channel==='mark-price'&&msg.arg?.instId===f.id){
+   const x=msg.data?.find(x=>x.instId===f.id);if(+x?.markPx>0&&Date.now()-Number(x.ts)<60000){markValue=+x.markPx;markReceived=Date.now();displayQuote();}
+  }else if(msg.arg?.channel==='tickers'&&msg.arg?.instId===f.id){
+   const x=msg.data?.find(x=>x.instId===f.id);acceptQuote(f,x,x?.ts,'ws');
+  }else if(msg.arg?.channel==='funding-rate'&&msg.arg?.instId===f.id){
+   const x=msg.data?.find(x=>x.instId===f.id);if(x)acceptFunding(f,x,'ws');
+  }
+ };
+ ws.onerror=()=>ws.close();
+ ws.onclose=()=>{
+  clearTimeout(connectionTimer);clearInterval(f.heartbeat);
+  if(feed!==f)return;
+  // Do not continue labeling a disconnected socket as live.
+  if(quoteSource==='ws'){quoteReceived=0;markReceived=0;displayQuote();}
+  if(fundingSource==='ws'){fundingReceived=0;displayFunding();}
+  price(f);refreshFunding(f,true);f.retry=setTimeout(()=>connectStream(f),5000);
+ };
+}
+function stopFeed(){
+ const old=feed;feed=null;
+ if(old){clearTimeout(old.retry);clearInterval(old.heartbeat);old.ws?.close();}
+}
+function loadMarket(clear=false){
+ stopFeed();riskTiers=[];riskState='Đang tải bậc rủi ro…';generation++;const gen=generation;meta=null;quote=null;quoteAt=0;quoteReceived=0;quoteSource='';quoteDetails={};markValue=NaN;markReceived=0;fundingRateValue=NaN;fundingSettlement=0;fundingNextTime=0;fundingIntervalHours=NaN;fundingReceived=0;fundingSource='';
+ $('metadata').textContent='Đang tải thông số công khai từ sàn…';
+ $('instrument').textContent=$('exchange').selectedOptions[0].text+' · '+idFor()+' · Vĩnh cửu USDT';
+ if(clear){['entry','stop','tp1','tp2','tp3'].forEach(id=>{if(id==='entry'||$('anchor').value==='absolute')$(id).value='';});}
+ render();displayQuote();metadata(gen);loadRisk(gen);
+ feed={gen,id:idFor(),bybit:$('exchange').value==='bybit',busy:false,snapshot:{},fundingBusy:false,fundingLastFetch:0};
+ connectStream(feed);price(feed);refreshMark(feed);refreshFunding(feed,true);
+}
+tradeInputs.forEach(el=>el.addEventListener('input',()=>{if(meta)meta.maxQty=$('order').value==='Market'?meta.maxMarket:meta.maxLimit;render();}));
+$('feePreset').addEventListener('change',()=>{const ex=$('exchange').value;if($('feePreset').value==='reference'){delete customFees[ex];syncFees(true);}else{customFees[ex]={maker:$('maker').value,taker:$('taker').value};syncFees();}render();});
+['maker','taker'].forEach(id=>$(id).addEventListener('input',()=>{$('feePreset').value='custom';customFees[$('exchange').value]={maker:$('maker').value,taker:$('taker').value};syncFees();render();}));
+$('exchange').addEventListener('change',()=>syncFees(true));
+$('marginMode').addEventListener('change',()=>loadRisk());
+$('anchor').addEventListener('change',convertAnchor);['exchange','symbol'].forEach(id=>$(id).addEventListener('change',()=>loadMarket(true)));
+$('refresh').onclick=()=>loadMarket();$('usePrice').onclick=()=>{if(quote&&Date.now()-quoteReceived<15000){$('entry').value=quote;render();}};$('lock').onclick=()=>{if(lastResult)setLock(true)};$('unlock').onclick=()=>setLock(false);
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('summary').value);$('copyStatus').textContent='Đã sao chép.'}catch{$('summary').focus();$('summary').select();$('copyStatus').textContent='Nhấn Ctrl+C để sao chép phần tóm tắt đã chọn.'}};
+$('download').onclick=()=>{const url=URL.createObjectURL(new Blob([$('summary').value],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='trade-setup-'+idFor()+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+syncFees(true);
+loadMarket();
+setInterval(()=>{if(!document.hidden){price();refreshMark();refreshFunding();}},3000);
+setInterval(()=>{displayQuote();displayFunding();},1000);
+window.addEventListener('pagehide',stopFeed);
+window.addEventListener('pageshow',()=>{if(!feed)loadMarket();});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)price();});
+</script></body></html>
+
