@@ -206,14 +206,15 @@ function renderLiquidation(v,r){
  const C=cross?($('liqCollateral').value.trim()===''?v.equity:n('liqCollateral')):(r?.margin+n('liqExtra'));
  const t=manual?{m:n('liqMmr')/100,D:n('liqDeduction'),kind:'manual',label:'nhập tay'}:null;
  const out=!cross&&!(n('liqExtra')>=0)?{error:'Ký quỹ bổ sung phải không âm.'}:r?liquidationEstimate(v,r,cross?'Cross':'Isolated',C,riskTiers,t,Math.max(0,v.stopFee)):{error:'Cần Entry, đòn bẩy và khối lượng hợp lệ.'};
- $('posLiq').textContent=out.P?'≈ '+priceFormat(out.P):'—';
+ $('posLiq').textContent=cross?'--':(out.P?'≈ '+priceFormat(out.P):'--');
+ $('posLiq').title=cross?'Chưa có giá thanh lý từ tài khoản sàn. Xem mô phỏng trong phần chi tiết.':'Giá mô phỏng, không phải dữ liệu tài khoản sàn.';
  let note=out.error||`${cross?'Cross · giả định chỉ một vị thế':'Isolated · mô hình đơn giản'} · vốn bảo đảm ${fmt(C)} USDT · MMR ${fmt(out.t.m*100,4)}% · khấu trừ ${fmt(out.t.D)} USDT · phí đóng giả định ${fmt(Math.max(0,v.stopFee)*100,4)}% · bậc ${out.t.label}.`;
  if(out.P){
   if(v.d*(v.E-out.P)<=0)note+=' Vốn giả định không đủ duy trì vị thế tại Entry.';
   if(markValue>0&&Date.now()-markReceived<15000&&v.d*(markValue-out.P)<=0)note+=' Mark hiện tại đã vượt ngưỡng mô phỏng.';
   if(v.stop>0&&v.d*(v.E-v.stop)>0&&v.d*(v.stop-out.P)<=0)note+=' SL nằm sau ngưỡng thanh lý mô phỏng.';
  }
- $('liqResult').textContent=note;
+ $('liqResult').textContent='Giá thanh lý mô phỏng: '+(out.P?'≈ '+priceFormat(out.P):'--')+'\n'+note;
  return out;
 }
 async function loadRisk(gen=generation){
@@ -293,7 +294,7 @@ function render(){
  $('summary').value=r?`${locked?'ĐÃ VÀO LỆNH':'KẾ HOẠCH'} · ${$('exchange').selectedOptions[0].text} · ${idFor()} · ${v.d===1?'LONG':'SHORT'} · ${$('order').value}\nEntry ${fmt(v.E,8)} | Đòn bẩy ${fmt(v.L)}× | Số lượng ${fmt(r.q,8)} đơn vị cơ sở\nGiá trị vị thế ${fmt(r.notional)} USDT | Ký quỹ ước tính ${fmt(r.margin)} USDT\nSL ${fmt(v.stop,8)} | Lỗ sau phí ${fmt(r.risk)} USDT (${fmt(r.risk/v.equity*100)}% vốn)\n${r.targets.map((t,i)=>`TP${i+1} ${fmt(t.X,8)} | Đóng ${fmt(t.w*100,0)}% | RR ${fmt(t.rr)} | Sau phí ${fmt(t.net)} USDT`).join('\n')}\nTổng lãi TP sau phí ${fmt(r.reward)} USDT | RR sau phí ${fmt(r.reward/r.risk)}\n${$('anchor').selectedOptions[0].text}. ${locked?'Giữ nguyên khối lượng đã khớp.':'Khối lượng kế hoạch được tính lại.'}\nNguồn phí: ${$('feePreset').selectedOptions[0].text}. Phí vào lệnh ${fmt(v.entryFee*100,4)}%, TP ${fmt(v.exitFee*100,4)}%, SL ${fmt(v.stopFee*100,4)}%. Chưa gồm funding/trượt giá. Giá thanh lý chỉ là mô phỏng một vị thế.\n${meta?'Đã tải thông số công khai từ sàn; giới hạn tài khoản có thể khác.':'NHẬP TAY / CHƯA XÁC MINH thông số hợp đồng.'}`:'Thiết lập không hợp lệ — xem thông báo phía trên.';
  if(r&&Number.isFinite(fundingRateValue)){const fm=Date.now()-markReceived<15000?markValue:NaN,fr=positionMath(v,fm,quoteIsFresh()?quote:NaN,'mark'),est=fr&&fm>0?-v.d*fr.value*fundingRateValue:NaN;$('summary').value+=`\nFunding hiện tại ${fmt(fundingRateValue*100,6)}%${fundingSettlement>0?' · settlement '+new Date(fundingSettlement).toLocaleString('vi-VN'):''}${Number.isFinite(est)?' · est. '+(est>=0?'+':'')+fmt(est,4)+' USDT nếu giữ qua settlement':''}. Không tự cộng funding vào TP/SL.`;}
  $('fillFee').disabled=locked||$('order').value==='Market';$('manualMax').disabled=locked||!!(meta?.max&&!$('override').checked);
- $('usePrice').disabled=locked||!quote||Date.now()-quoteReceived>15000;renderPosition();if(r)$('summary').value+='\nEst. Liq. Price (mô phỏng): '+$('posLiq').textContent+'\n'+$('liqResult').textContent;
+ $('usePrice').disabled=locked||!quote||Date.now()-quoteReceived>15000;renderPosition();if(r)$('summary').value+='\n'+$('liqResult').textContent;
 }
 function setLock(on){locked=on;if(on)$('symbolResults').hidden=true;$('reloadSymbols').disabled=on||catalogueLoading;if(on)filledQty=lastResult.q;tradeInputs.forEach(el=>el.disabled=on&&el.id!=='entry');$('lock').hidden=on;$('unlock').hidden=!on;$('modeLabel').textContent=on?'Chỉ sửa Entry':'Lập kế hoạch';$('modeHint').textContent=on?'Chỉ Entry được chỉnh sửa. Khối lượng đã khớp giữ nguyên; mọi kết quả liên quan cập nhật ngay.':'Bấm “Đã vào lệnh” để khóa khối lượng và thiết lập, chỉ cho sửa Entry. Công cụ không gửi lệnh lên sàn.';render();}
 function convertAnchor(){const E=n('entry'),d=n('side');if(!(E>0)){ $('anchor').value=lastAnchor;return;}const rel=lastAnchor==='relative';['stop','tp1','tp2','tp3'].forEach(id=>{const sign=id==='stop'?-d:d;$(id).value=Number((rel?E*(1+sign*n(id)/100):sign*(n(id)/E-1)*100).toPrecision(12));});lastAnchor=$('anchor').value;['stop','tp1','tp2','tp3'].forEach(id=>$(id+'Label').firstChild.textContent=(id==='stop'?'SL':id.toUpperCase())+(lastAnchor==='relative'?' · Khoảng cách %':' · Giá USDT'));render();}
