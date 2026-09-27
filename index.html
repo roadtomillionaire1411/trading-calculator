@@ -6,12 +6,12 @@
 .position-card{background:#080d12;border-color:#354252}.position-head{display:flex;justify-content:space-between;gap:20px;align-items:start}.position-head h2{font-size:22px;margin:0 0 4px}.pnl-block{text-align:right}.pnl-block strong{display:block;font-size:25px;font-variant-numeric:tabular-nums}.position-numbers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:26px 0 18px}.position-numbers span{display:block;color:var(--muted);font-size:11px}.position-numbers strong{display:block;margin-top:6px;font-size:17px;overflow-wrap:anywhere}.position-exits{padding:12px;border-radius:8px;background:#141c25}.position-foot{font-size:11px;color:var(--muted);margin-top:12px}@media(max-width:1050px){.position-numbers{grid-template-columns:repeat(2,minmax(0,1fr))}.position-head{flex-wrap:wrap}.pnl-block{text-align:left}.fundinggrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 .position-card{background:#000;border:1px solid #2b3036;padding:30px;color:#f4f4f4}.position-head{display:flex;flex-wrap:nowrap;justify-content:space-between;gap:18px}.position-head h2{font-size:30px;letter-spacing:.2px;margin-bottom:12px}.position-direction{font-size:20px;display:flex;gap:8px;align-items:center}.position-separator{color:#303030;margin:0 3px}.position-card .positive{color:#18ba80}.position-card .negative{color:#f06475}.pnl-block{text-align:right}.exchange-label{color:#858585;font-size:17px;border-bottom:1px dotted #666;padding-bottom:3px}.pnl-block strong{font-size:30px;font-weight:600;margin:8px 0 2px}.position-numbers{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:36px 0 25px}.position-numbers span{color:#858585;font-size:15px}.position-numbers strong{font-weight:500;font-size:23px;margin-top:12px}.position-more{border-top:1px solid #252525;margin-top:16px;padding-top:12px}.position-more .position-exits{margin-top:16px}.position-card #posLiq{color:#e4ac66}.position-card .position-foot,.position-card #posBasis{font-size:11px;color:#89929c}@media(max-width:1150px) and (min-width:761px){.position-numbers{grid-template-columns:repeat(2,minmax(0,1fr))}.position-head{flex-wrap:wrap}.pnl-block{text-align:left}}@media(max-width:600px){.position-card{padding:20px}.position-head{flex-wrap:wrap}.pnl-block{text-align:left}.position-numbers{grid-template-columns:repeat(2,minmax(0,1fr))}.position-head h2{font-size:26px}.pnl-block strong{font-size:28px}}
-</style></head><body><main>
+.symbol-results{max-height:240px;overflow:auto;display:grid;gap:4px;margin-top:6px}.symbol-results[hidden]{display:none}.symbol-results button{text-align:left;width:100%}.order-tag{font-size:12px;border:1px solid #444;border-radius:5px;padding:2px 7px;color:#cbd5df}</style></head><body><main>
 <header><h1>Bảng tính giao dịch</h1></header>
 <div class="layout"><section class="setup">
 <div class="panel"><h2>01 / Thị trường & vị thế</h2><div class="grid">
 <label>Sàn giao dịch<select id="exchange"><option value="bybit">Bybit</option><option value="okx">OKX</option></select></label>
-<label>Cặp giao dịch<select id="symbol"></select></label><label class="full">Tìm cặp giao dịch<input id="symbolSearch" type="search" placeholder="BTC, HYPE, PEPE…" autocomplete="off"></label><div class="full"><small id="symbolStatus" role="status">Đang tải toàn bộ cặp USDT vĩnh cửu…</small> <button type="button" id="reloadSymbols">Tải lại danh sách cặp</button></div>
+<label>Cặp giao dịch<select id="symbol"></select></label><label class="full">Tìm cặp giao dịch<input id="symbolSearch" type="search" placeholder="BTC, HYPE, PEPE…" autocomplete="off" aria-controls="symbolResults"></label><div id="symbolResults" class="full symbol-results" hidden aria-label="Kết quả tìm cặp" ></div><div class="full"><small id="symbolStatus" role="status">Đang tải toàn bộ cặp USDT vĩnh cửu…</small> <button type="button" id="reloadSymbols">Tải lại danh sách cặp</button></div>
 <label>Chiều lệnh<select id="side"><option value="1">Long / Mua</option><option value="-1">Short / Bán</option></select></label>
 <label>Loại lệnh<select id="order"><option value="Limit">Limit · Lệnh giới hạn</option><option value="Market">Market · Lệnh thị trường</option></select></label>
 <label>Chế độ ký quỹ<select id="marginMode"><option value="Cross">Cross</option><option value="Isolated">Isolated</option></select></label><label>Giá tính lời/lỗ hiện tại<select id="pnlSource"><option value="mark">Mark Price</option><option value="last">Last Price</option></select></label>
@@ -47,7 +47,7 @@
 <div class="panel"><div class="feed"><div><div class="eyebrow" id="instrument">Bybit · BTCUSDT · Vĩnh cửu USDT</div><div class="muted">Giá khớp gần nhất (Last)</div><strong id="quote">—</strong><span class="muted"> USDT</span></div><button id="refresh">Cập nhật dữ liệu</button></div><div id="quoteStatus" class="quoteNote muted">Đang kết nối giá trực tiếp…</div><div id="quoteCompare" class="quoteNote muted"></div><p class="quoteNote">Đối chiếu cùng sàn, cùng mã hợp đồng và cùng loại giá. BTCUSDT khác BTCUSDC; giá Last khác giá Mark. Entry là giá vào lệnh của anh, không tự chạy theo thị trường.</p></div>
 <div class="panel" id="fundingPanel"><div class="topline"><h2>Funding realtime</h2><span id="fundingLive" class="muted">Đang tải…</span></div><div class="fundinggrid"><div class="fundingmetric"><span>Funding Rate hiện tại</span><strong id="fundingRate">—</strong></div><div class="fundingmetric"><span>Settlement tiếp theo</span><strong id="fundingTime">—</strong></div><div class="fundingmetric"><span>Countdown</span><strong id="fundingCountdown">—</strong></div><div class="fundingmetric"><span>Est. Funding · theo Mark</span><strong id="fundingEstimate">—</strong></div></div><p id="fundingStatus" class="funding-status">Funding chỉ phát sinh nếu vị thế còn mở tại thời điểm settlement. Số tiền hiển thị là ước tính theo Mark Price hiện tại.</p></div>
 <div class="panel position-card" id="positionCard">
-<div class="position-head"><div><h2 id="posSymbol">—</h2><div class="position-direction"><span id="posSide"></span><span class="position-separator">|</span><span id="posMode"></span> <span id="posLeverage"></span></div></div><div class="pnl-block"><span class="exchange-label">Unrealized P&amp;L (USDT)</span><strong id="posPnl">—</strong><small id="posBasis">Theo Mark Price · ROI ước tính</small></div></div>
+<div class="position-head"><div><h2 id="posSymbol">—</h2><div class="position-direction"><span id="posSide"></span><span class="position-separator">|</span><span id="posMode"></span> <span id="posLeverage"></span><span id="posOrder" class="order-tag"></span></div></div><div class="pnl-block"><span class="exchange-label">Unrealized P&amp;L (USDT)</span><strong id="posPnl">—</strong><small id="posBasis">Theo Mark Price · ROI ước tính</small></div></div>
 <div class="position-numbers"><div><span>Value (USDT)</span><strong id="posValue">—</strong></div><div><span>Entry Price</span><strong id="posEntry">—</strong></div><div><span>Mark Price</span><strong id="posMark">—</strong></div><div><span>Estimated Liq. Price</span><strong id="posLiq">—</strong></div></div>
 <div class="position-foot"><span id="posState"></span> · Value theo Mark · ROI và giá thanh lý là ước tính.</div>
 <div id="posMessage" class="notice" role="status"></div>
@@ -104,6 +104,17 @@ function showSymbols(){
  const current=$('symbol').value,ex=$('exchange').value,query=$('symbolSearch').value.trim().toUpperCase();
  const all=catalogue[ex]||symbols.map(key=>({key,id:ex==='bybit'?key+'USDT':key+'-USDT-SWAP'}));
  const matches=all.filter(x=>x.key.includes(query)||x.id.includes(query));
+ const results=$('symbolResults');results.replaceChildren();
+ results.hidden=locked||(!query&&document.activeElement!==$('symbolSearch'));
+ if(!results.hidden){
+  for(const item of matches.slice(0,100)){
+   const button=document.createElement('button');button.type='button';button.textContent=item.id+' · Chọn cặp';
+   button.onclick=()=>{if(locked)return;$('symbol').value=item.key;$('symbolSearch').value='';results.hidden=true;loadMarket(true);showSymbols();};
+   results.append(button);
+  }
+  if(!matches.length)results.textContent='Không tìm thấy cặp phù hợp.';
+  else if(matches.length>100){const note=document.createElement('small');note.textContent='Hiện 100 kết quả đầu. Nhập tên để thu hẹp danh sách.';results.append(note);}
+ }
  const visible=matches.slice();
  if(current&&!visible.some(x=>x.key===current))visible.unshift(all.find(x=>x.key===current)||{key:current,id:current,unlisted:true});
  $('symbol').replaceChildren(...visible.map(x=>new Option(x.key+' / USDT'+(x.unlisted?' · chưa xác minh':(!matches.includes(x)&&query?' · đang chọn':'')),x.key)));
@@ -233,7 +244,7 @@ function renderPosition(){
  const freshLast=quoteIsFresh()?quote:NaN,source=$('pnlSource').value;
  const r=positionMath(v,freshMark,freshLast,source);
  $('posSymbol').textContent=idFor();$('posSide').textContent=v.d===1?'Long':'Short';$('posSide').className=v.d===1?'positive':'negative';
- $('posMode').textContent=$('marginMode').value;$('posLeverage').textContent=fmt(v.L,Number.isInteger(v.L)?0:2)+'x';
+ $('posOrder').textContent=$('order').value; $('posMode').textContent=$('marginMode').value;$('posLeverage').textContent=fmt(v.L,Number.isInteger(v.L)?0:2)+'x';
  $('posState').textContent=locked?'Đã ghi nhận · khối lượng cố định':'Mô phỏng kế hoạch · chưa ghi nhận lệnh';
  $('posEntry').textContent=v.E>0?priceFormat(v.E):'—';$('posMark').textContent=freshMark>0?priceFormat(freshMark):'—';
  $('posValue').textContent=fmt(r?.value,4);
@@ -284,7 +295,7 @@ function render(){
  $('fillFee').disabled=locked||$('order').value==='Market';$('manualMax').disabled=locked||!!(meta?.max&&!$('override').checked);
  $('usePrice').disabled=locked||!quote||Date.now()-quoteReceived>15000;renderPosition();if(r)$('summary').value+='\nEst. Liq. Price (mô phỏng): '+$('posLiq').textContent+'\n'+$('liqResult').textContent;
 }
-function setLock(on){locked=on;$('reloadSymbols').disabled=on||catalogueLoading;if(on)filledQty=lastResult.q;tradeInputs.forEach(el=>el.disabled=on&&el.id!=='entry');$('lock').hidden=on;$('unlock').hidden=!on;$('modeLabel').textContent=on?'Chỉ sửa Entry':'Lập kế hoạch';$('modeHint').textContent=on?'Chỉ Entry được chỉnh sửa. Khối lượng đã khớp giữ nguyên; mọi kết quả liên quan cập nhật ngay.':'Bấm “Đã vào lệnh” để khóa khối lượng và thiết lập, chỉ cho sửa Entry. Công cụ không gửi lệnh lên sàn.';render();}
+function setLock(on){locked=on;if(on)$('symbolResults').hidden=true;$('reloadSymbols').disabled=on||catalogueLoading;if(on)filledQty=lastResult.q;tradeInputs.forEach(el=>el.disabled=on&&el.id!=='entry');$('lock').hidden=on;$('unlock').hidden=!on;$('modeLabel').textContent=on?'Chỉ sửa Entry':'Lập kế hoạch';$('modeHint').textContent=on?'Chỉ Entry được chỉnh sửa. Khối lượng đã khớp giữ nguyên; mọi kết quả liên quan cập nhật ngay.':'Bấm “Đã vào lệnh” để khóa khối lượng và thiết lập, chỉ cho sửa Entry. Công cụ không gửi lệnh lên sàn.';render();}
 function convertAnchor(){const E=n('entry'),d=n('side');if(!(E>0)){ $('anchor').value=lastAnchor;return;}const rel=lastAnchor==='relative';['stop','tp1','tp2','tp3'].forEach(id=>{const sign=id==='stop'?-d:d;$(id).value=Number((rel?E*(1+sign*n(id)/100):sign*(n(id)/E-1)*100).toPrecision(12));});lastAnchor=$('anchor').value;['stop','tp1','tp2','tp3'].forEach(id=>$(id+'Label').firstChild.textContent=(id==='stop'?'SL':id.toUpperCase())+(lastAnchor==='relative'?' · Khoảng cách %':' · Giá USDT'));render();}
 async function request(url){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8000);try{const res=await fetch(url,{signal:controller.signal,credentials:'omit'});if(!res.ok)throw Error('HTTP '+res.status);return await res.json();}finally{clearTimeout(timer)}}
 async function metadata(gen){const bybit=$('exchange').value==='bybit',id=idFor(),base=baseFor();try{
@@ -462,7 +473,7 @@ $('feePreset').addEventListener('change',()=>{const ex=$('exchange').value;if($(
 ['maker','taker'].forEach(id=>$(id).addEventListener('input',()=>{$('feePreset').value='custom';customFees[$('exchange').value]={maker:$('maker').value,taker:$('taker').value};syncFees();render();}));
 $('exchange').addEventListener('change',()=>syncFees(true));
 $('marginMode').addEventListener('change',()=>loadRisk());
-$('symbolSearch').addEventListener('input',showSymbols);$('reloadSymbols').onclick=loadSymbols;
+$('symbolSearch').addEventListener('input',showSymbols);$('symbolSearch').addEventListener('focus',showSymbols);$('symbolSearch').addEventListener('keydown',e=>{if(e.key==='Escape')$('symbolResults').hidden=true;if(e.key==='Enter'){e.preventDefault();$('symbolResults').querySelector('button')?.click();$('symbolResults').hidden=true;}});$('reloadSymbols').onclick=loadSymbols;
 $('anchor').addEventListener('change',convertAnchor);
 $('symbol').addEventListener('change',()=>{loadMarket(true);showSymbols();});
 $('exchange').addEventListener('change',()=>{$('symbolSearch').value='';showSymbols();loadMarket(true);loadSymbols();});
