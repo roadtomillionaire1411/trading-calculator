@@ -8,7 +8,7 @@
 .position-card{background:#000;border:1px solid #2b3036;padding:30px;color:#f4f4f4}.position-head{display:flex;flex-wrap:nowrap;justify-content:space-between;gap:18px}.position-head h2{font-size:30px;letter-spacing:.2px;margin-bottom:12px}.position-direction{font-size:20px;display:flex;gap:8px;align-items:center}.position-separator{color:#303030;margin:0 3px}.position-card .positive{color:#18ba80}.position-card .negative{color:#f06475}.pnl-block{text-align:right}.exchange-label{color:#858585;font-size:17px;border-bottom:1px dotted #666;padding-bottom:3px}.pnl-block strong{font-size:30px;font-weight:600;margin:8px 0 2px}.position-numbers{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:36px 0 25px}.position-numbers span{color:#858585;font-size:15px}.position-numbers strong{font-weight:500;font-size:23px;margin-top:12px}.position-more{border-top:1px solid #252525;margin-top:16px;padding-top:12px}.position-more .position-exits{margin-top:16px}.position-card #posLiq{color:#e4ac66}.position-card .position-foot,.position-card #posBasis{font-size:11px;color:#89929c}@media(max-width:1150px) and (min-width:761px){.position-numbers{grid-template-columns:repeat(2,minmax(0,1fr))}.position-head{flex-wrap:wrap}.pnl-block{text-align:left}}@media(max-width:600px){.position-card{padding:20px}.position-head{flex-wrap:wrap}.pnl-block{text-align:left}.position-numbers{grid-template-columns:repeat(2,minmax(0,1fr))}.position-head h2{font-size:26px}.pnl-block strong{font-size:28px}}
 .symbol-results{max-height:240px;overflow:auto;display:grid;gap:4px;margin-top:6px}.symbol-results[hidden]{display:none}.symbol-results button{text-align:left;width:100%}.order-tag{font-size:12px;border:1px solid #444;border-radius:5px;padding:2px 7px;color:#cbd5df}
 body{background:#101014}main{max-width:1320px;padding:24px}.layout{grid-template-columns:320px minmax(0,1fr);gap:24px}.compact-trade{background:#141418;border-color:#29292f;padding:18px}.compact-trade input,.compact-trade select{background:#222227;border:0;border-radius:5px}.compact-trade .grid{gap:12px}.compact-trade h2{margin-bottom:14px}.compact-trade label{font-size:12px}.order-tabs{display:flex;gap:22px;margin:20px 0 14px}.order-tabs button{border:0;padding:4px 0;background:none;color:#777}.order-tabs button.active{color:#f7a600;border-bottom:2px solid #f7a600}.compact-values{border:1px solid #303037;border-radius:6px;padding:10px;margin-top:16px}.compact-values div{display:flex;justify-content:space-between;color:#92929b}.compact-values strong{color:#eee}.compact-trade .actions button{font-size:12px;padding:10px}.compact-trade #lock{background:#f7a600}.compact-trade #symbolStatus{display:none}.compact-trade #symbolResults{font-size:12px}.position-foot,.position-more,#posMessage,#posBasis,#quoteCompare,.quoteNote+ p{display:none!important}.layout>section:last-child>.panel{display:none}.layout>section:last-child>.panel:has(#quote),.layout>section:last-child>#positionCard{display:block}.layout>section:last-child>.panel:has(#quote){background:#141418}.position-head h2{font-size:26px}.pnl-block strong{font-size:28px}.position-numbers strong{font-size:21px}.position-numbers span{font-size:13px}.position-head{flex-wrap:wrap}footer{font-size:10px}#compactError{font-size:12px;color:#eac788;margin-top:8px}.compact-trade [hidden]{display:none!important}@media(max-width:760px){.layout{display:block}main{padding:16px}} 
-</style></head><body><main>
+.compact-exits{border-top:1px solid #303037;margin-top:20px;padding-top:18px}.exit-inputs{display:grid;grid-template-columns:2fr 1fr;gap:10px}.compact-exits small{display:block;font-size:10px;margin-top:10px}#scenarioError{font-size:12px;color:#eac788}#scenarioCards{display:grid;grid-template-columns:1fr 1fr;gap:14px}.scenario-card{background:#000;border:1px solid #303037;border-radius:14px;padding:20px}.scenario-card h3{margin:0 0 8px}.scenario-card strong{display:block;font-size:24px;margin:12px 0}.scenario-card p{color:#939aa4;font-size:12px}.scenario-card button{font-size:12px;padding:7px 12px}.scenario-card small{font-size:10px}@media(max-width:900px){#scenarioCards{grid-template-columns:1fr}}</style></head><body><main>
 <header><h1>Bảng tính giao dịch</h1></header>
 <div class="layout"><section class="setup">
 <div class="panel"><h2>01 / Thị trường & vị thế</h2><div class="grid">
@@ -71,7 +71,7 @@ body{background:#101014}main{max-width:1320px;padding:24px}.layout{grid-template
 <p>Giá thanh lý giải phương trình C + d×q×(P−E) = max(0,q×P×MMR−D) + q×P×f. C là vốn bảo đảm chưa cộng PnL vị thế, D là khấu trừ duy trì, f là phí Taker không âm. Cross giả định một vị thế duy nhất; Isolated dùng q×E/đòn bẩy + ký quỹ bổ sung. Đây là mô hình cân bằng ký quỹ đơn giản, không phải thuật toán thanh lý đầy đủ của sàn. Vốn tài khoản chỉ dùng để tính khối lượng và tỷ lệ rủi ro. Không suy đoán funding, trượt giá, lịch sử khớp từng phần hay hạng tài khoản.</p>
 <p>Đòn bẩy công khai là mức trần của hợp đồng, không đảm bảo tài khoản hoặc quy mô vị thế được dùng mức đó. Thông số được tải khi đổi sàn/cặp hoặc bấm cập nhật; giá ưu tiên kết nối WebSocket liên tục; khi mất kết nối, chuyển sang lấy giá mỗi 3 giây và hiện rõ chế độ dự phòng. Funding lấy từ public WebSocket của sàn và có REST fallback; số tiền funding ước tính = giá trị vị thế theo Mark × funding rate, đổi dấu theo Long/Short. Funding không được tự cộng vào TP/SL vì chỉ phát sinh nếu vị thế còn mở tại đúng thời điểm settlement. Yêu cầu hết hạn sau 8 giây. Nếu mất mạng, bị chặn CORS hoặc khu vực, vẫn tính thủ công được. Không dùng khóa API, thư viện ngoài hay chức năng đặt lệnh. Dữ liệu nhập chỉ ở trong trang và không được lưu qua lần tải lại. Ô nhập dùng dấu chấm cho phần thập phân; kết quả dùng dấu phẩy ngăn hàng nghìn.</p>
 <p>Tài liệu kiểm tra ngày 25/09/2026: <a href="https://bybit-exchange.github.io/docs/v5/market/instrument" target="_blank" rel="noopener">Thông số Bybit</a> · <a href="https://bybit-exchange.github.io/docs/v5/market/tickers" target="_blank" rel="noopener">Giá Bybit</a> · <a href="https://www.okx.com/docs-v5/en/" target="_blank" rel="noopener">API công khai OKX V5</a> · <a href="https://www.bybit.com/en/help-center/article/Profit-Loss-calculations-USDT-Contract" target="_blank" rel="noopener">Công thức lời/lỗ Bybit</a> · <a href="https://www.okx.com/en-sg/help/futures-pnl-calculation-rules" target="_blank" rel="noopener">Công thức lời/lỗ OKX</a></p></details></div>
-</section></div><footer>Bảng tính độc lập · Không đăng nhập hay đặt lệnh trên sàn</footer></main>
+</section></div><footer>Bảng tính độc lập · Không đăng nhập hay đặt lệnh trên sàn</footer><section id="tradeHistory" class="panel"><div class="topline"><h2>Lịch sử lệnh</h2><button id="exportHistory" type="button">Tải lịch sử</button></div><small id="historyStatus">Lưu trên trình duyệt này · Chưa đồng bộ tài khoản</small><div class="tablewrap"><table><thead><tr><th>Thời gian</th><th>Cặp / Lệnh</th><th>Entry</th><th>Khối lượng</th><th>Ký quỹ</th><th>TP1 / TP2 / TP3 / SL</th></tr></thead><tbody id="historyRows"></tbody></table></div></section></main>
 <script>
 (()=>{
  const get=id=>document.getElementById(id),setup=document.querySelector('.setup');
@@ -82,7 +82,12 @@ body{background:#101014}main{max-width:1320px;padding:24px}.layout{grid-template
  move('exchange','compactTop','Sàn');move('symbol','compactTop','Cặp');move('symbolSearch','compactSearch','');get('symbolSearch').placeholder='Tìm cặp…';get('compactSearch').append(get('symbolResults'));
  move('marginMode','compactMode','Ký quỹ');move('leverage','compactMode','Đòn bẩy ×');get('leverage').closest('label').className='';
  move('entry','compactEntry','Entry · USDT');get('entry').value='';get('entry').placeholder='Giá vào lệnh';
- move('side','compactSize','Chiều');move('size','compactSize','Khối lượng');get('size').closest('label').className='';get('size').value='';get('size').placeholder='Số lượng coin';get('sizing').value='quantity';
+ move('side','compactSize','Chiều');move('size','compactSize','Khối lượng');get('size').closest('label').className='';get('size').value='';get('size').placeholder='Số lượng coin';get('sizing').replaceChildren(new Option('USDT ký quỹ','margin'),new Option('Coin','quantity'));get('sizing').value='margin';move('sizing','compactSize','Đơn vị');
+ const exits=document.createElement('div');exits.className='compact-exits';exits.innerHTML='<h2>TP / SL</h2><div class="exit-inputs">'+[1,2,3].map((i)=>'<label>TP'+i+' · Giá<input id="scenarioTP'+i+'" type="number" min="0" step="any" placeholder="Giá TP'+i+'"></label><label>Đóng %<input id="scenarioW'+i+'" type="number" min="0" max="100" step="any" value="'+[40,35,25][i-1]+'"></label>').join('')+'<label>SL · Giá<input id="scenarioSL" type="number" min="0" step="any" placeholder="Giá cắt lỗ"></label></div><small>PnL cộng dồn sau phí · SL trước TP.</small><div id="scenarioError" role="status"></div>';
+ const costs=document.createElement('div');costs.className='compact-exits';costs.hidden=true;costs.innerHTML='<h2>Phí & funding</h2><div class="exit-inputs"><label>Phí vào · %<input id="scenarioEntryFee" type="number" step="any" placeholder="Theo sàn"></label><label>Phí thoát · %<input id="scenarioExitFee" type="number" step="any" placeholder="Theo sàn"></label><label>Số kỳ funding<input id="scenarioPeriods" type="number" min="0" step="1" value="1"></label><label>Rate · %<input id="scenarioRate" type="number" step="any" placeholder="Trực tiếp"></label></div><label>Funding thực tế · USDT<input id="scenarioActualFunding" type="number" step="any" placeholder="Trống: tự tính"></label><small>Dương = đã trả; âm = đã nhận. Nhập số thực tế sẽ thay phép tính funding.</small><small id="scenarioFundingNote"></small>';
+ box.append(exits,costs);
+ const scenarios=document.createElement('div');scenarios.id='scenarioCards';document.querySelector('#positionCard').after(scenarios);
+ 
  for(const id of ['usePrice','lock','unlock'])get('compactActions').append(get(id));get('usePrice').textContent='Giá hiện tại';get('lock').textContent='Ghi nhận';get('unlock').textContent='Chỉnh sửa';
  document.querySelectorAll('[data-order]').forEach(b=>b.onclick=()=>{if(get('order').disabled)return;get('order').value=b.dataset.order;get('order').dispatchEvent(new Event('input',{bubbles:true}));document.querySelectorAll('[data-order]').forEach(x=>x.classList.toggle('active',x===b));});
 })();
@@ -257,6 +262,49 @@ function priceFormat(value){
  const decimals=tick>0?Math.min(8,Math.max(0,Math.ceil(-Math.log10(tick)))):6;
  return fmt(value,decimals);
 }
+
+let scenarioData=[];
+function renderScenarios(v,r){
+ const prices=[1,2,3].map(i=>n('scenarioTP'+i)),weights=[1,2,3].map(i=>n('scenarioW'+i)/100),sl=n('scenarioSL');
+ const allocation=weights.every(w=>Number.isFinite(w)&&w>=0&&w<=1)&&Math.abs(weights.reduce((a,b)=>a+b,0)-1)<1e-6;
+ const ef=$('scenarioEntryFee').value.trim()===''?v.entryFee:n('scenarioEntryFee')/100;
+ const xf=$('scenarioExitFee').value.trim()===''?v.exitFee:n('scenarioExitFee')/100;
+ const sf=$('scenarioExitFee').value.trim()===''?v.stopFee:xf;
+ const periods=n('scenarioPeriods'),actual=$('scenarioActualFunding').value.trim()!=='';
+ const rate=$('scenarioRate').value.trim()!==''?n('scenarioRate')/100:(fundingIsFresh()?fundingRateValue:NaN);
+ const fundingMark=Date.now()-markReceived<15000?markValue:NaN;
+ const fundingTotal=actual?n('scenarioActualFunding'):(periods===0?0:(r&&Number.isInteger(periods)&&periods>0?v.d*r.q*fundingMark*rate*periods:NaN));
+ const costsValid=[ef,xf,sf].every(f=>Number.isFinite(f)&&Math.abs(f)<=.01)&&Number.isFinite(fundingTotal);
+ $('scenarioEntryFee').placeholder=fmt(v.entryFee*100,4);$('scenarioExitFee').placeholder=fmt(v.exitFee*100,4);
+ $('scenarioRate').placeholder=fundingIsFresh()?fmt(fundingRateValue*100,6):'Chờ rate';
+ $('scenarioFundingNote').textContent=actual?'Funding thực tế phân bổ theo % đóng.':periods===0?'0 kỳ: không tính funding.':'Funding theo Mark hiện tại × rate × số kỳ; phân bổ theo % đóng. Rate và giá tương lai có thể đổi.';
+ $('scenarioError').textContent=!allocation?'Tổng % đóng phải bằng 100%.':!costsValid?'Đang chờ dữ liệu phí / funding từ sàn.':'';
+ let total=0,closed=0,exitFees=0;
+ scenarioData=prices.map((price,i)=>{
+  closed+=weights[i];total+=r?v.d*r.q*weights[i]*(price-v.E):NaN;exitFees+=r?r.q*weights[i]*price*xf:NaN;
+  const fees=r?r.q*v.E*closed*ef+exitFees:NaN,funding=fundingTotal*closed;
+  const valid=r&&allocation&&costsValid&&prices.slice(0,i+1).every((p,j)=>p>0&&v.d*(p-v.E)>0&&(j===0||v.d*(p-prices[j-1])>0));
+  const pnl=valid?total-fees-funding:NaN;
+  return {title:i===2?'Hit full TP':'Hit TP '+(i+1),price,pnl,fees,funding,roi:valid?pnl/r.margin*100:NaN,detail:'Đã đóng '+fmt(closed*100,0)+'% · PnL cộng dồn',estimated:!actual&&periods!==0};
+ });
+ const validSL=r&&costsValid&&sl>0&&v.d*(sl-v.E)<0,slFees=r?r.q*(v.E*ef+sl*sf):NaN;
+ const slPnl=validSL?v.d*r.q*(sl-v.E)-slFees-fundingTotal:NaN;
+ scenarioData.push({title:'Hit SL',price:sl,pnl:slPnl,fees:slFees,funding:fundingTotal,roi:validSL?slPnl/r.margin*100:NaN,detail:'Đóng 100% · SL trước TP',estimated:!actual&&periods!==0});
+ $('scenarioCards').innerHTML=scenarioData.map((x,i)=>'<article class="scenario-card"><h3>'+x.title+'</h3><span>'+idFor()+' · '+(v.d===1?'Long':'Short')+' '+v.L+'×</span><strong class="'+(x.pnl<0?'negative':'positive')+'">'+(Number.isFinite(x.pnl)?fmt(x.pnl)+' USDT ('+fmt(x.roi)+'%)':(x.price>0?'Chưa đủ dữ liệu':'Chưa nhập giá'))+'</strong><p>Entry '+priceFormat(v.E)+' → '+(x.price>0?priceFormat(x.price):'—')+'</p><p>'+x.detail+'</p><p>Phí '+fmt(x.fees)+' · Funding '+fmt(x.funding)+' USDT</p><button type="button" data-image="'+i+'" '+(!Number.isFinite(x.pnl)?'disabled':'')+'>Tải ảnh</button><p><small>PnL tại TP/SL sau phí'+(x.estimated?' · Funding 1 kỳ theo rate hiện tại':' & funding')+'</small></p></article>').join('');
+ $('scenarioCards').querySelectorAll('[data-image]').forEach(b=>b.onclick=()=>downloadScenario(+b.dataset.image));
+}
+
+function downloadScenario(i){
+ const x=scenarioData[i],v=getValues();if(!Number.isFinite(x?.pnl))return;
+ const canvas=document.createElement('canvas');canvas.width=1100;canvas.height=520;const ctx=canvas.getContext('2d');
+ ctx.fillStyle='#080a0d';ctx.fillRect(0,0,1100,520);ctx.fillStyle='#fff';ctx.font='bold 38px Arial';ctx.fillText(idFor()+' · '+x.title,48,75);
+ ctx.font='24px Arial';ctx.fillStyle='#9da6b2';ctx.fillText((v.d===1?'Long':'Short')+' · '+$('marginMode').value+' '+v.L+'× · '+$('order').value,48,125);
+ ctx.fillStyle=x.pnl<0?'#ff8e9c':'#18ba80';ctx.font='bold 55px Arial';ctx.fillText(fmt(x.pnl)+' USDT ('+fmt(x.roi)+'%)',48,235);
+ ctx.fillStyle='#fff';ctx.font='27px Arial';ctx.fillText('Entry '+priceFormat(v.E)+'  →  '+priceFormat(x.price),48,310);
+ ctx.fillStyle='#9da6b2';ctx.font='23px Arial';ctx.fillText(x.detail,48,370);ctx.font='20px Arial';ctx.fillText('Phí '+fmt(x.fees)+' · Funding '+fmt(x.funding)+' USDT',48,416);ctx.fillText('PnL tại TP/SL sau phí'+(x.estimated?' · Funding 1 kỳ theo rate hiện tại':' & funding'),48,470);
+ canvas.toBlob(blob=>{if(!blob)return;const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=idFor()+'-'+['tp1','tp2','full-tp','sl'][i]+'.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);},'image/png');
+}
+
 function renderPosition(){
  const v=getValues(),freshMark=Date.now()-markReceived<15000?markValue:NaN;
  const freshLast=quoteIsFresh()?quote:NaN,source=$('pnlSource').value;
@@ -266,7 +314,7 @@ function renderPosition(){
  $('posState').textContent=locked?'Đã ghi nhận · khối lượng cố định':'Mô phỏng kế hoạch · chưa ghi nhận lệnh';
  $('posEntry').textContent=v.E>0?priceFormat(v.E):'—';$('posMark').textContent=freshMark>0?priceFormat(freshMark):'—';
  $('posValue').textContent=fmt(r?.value,4);
- $('size').closest('label').firstChild.textContent='Khối lượng · '+baseFor();$('posPnl').title='PnL chưa trừ phí; ROI ước tính';
+ $('size').closest('label').firstChild.textContent=$('sizing').value==='margin'?'Ký quỹ · USDT':'Khối lượng · '+baseFor();$('size').placeholder=$('sizing').value==='margin'?'Số USDT chưa nhân đòn bẩy':'Số lượng coin';renderScenarios(v,r);$('posPnl').title='PnL chưa trừ phí; ROI ước tính';
  $('tradeValue').textContent=r?fmt(r.q*v.E)+' USDT':'—';$('tradeCost').textContent=r?fmt(r.margin)+' USDT':'—';$('compactError').textContent=(!r&&v.E>0&&v.size>0)?'Kiểm tra Entry, khối lượng và đòn bẩy.':(!locked&&$('lock').disabled&&v.E>0&&v.size>0?'Thông số vượt giới hạn sàn.':'');
  document.querySelectorAll('[data-order]').forEach(b=>b.disabled=locked);
  $('posPnl').textContent=r&&Number.isFinite(r.pnl)?`${fmt(r.pnl)}(${fmt(r.roi)}%)`:'—';
@@ -498,9 +546,31 @@ $('symbolSearch').addEventListener('input',showSymbols);$('symbolSearch').addEve
 $('anchor').addEventListener('change',convertAnchor);
 $('symbol').addEventListener('change',()=>{loadMarket(true);showSymbols();});
 $('exchange').addEventListener('change',()=>{$('symbolSearch').value='';showSymbols();loadMarket(true);loadSymbols();});
-$('refresh').onclick=()=>loadMarket();$('usePrice').onclick=()=>{if(quote&&Date.now()-quoteReceived<15000){$('entry').value=quote;render();}};$('lock').onclick=()=>{if(lastResult)setLock(true)};$('unlock').onclick=()=>setLock(false);
+$('refresh').onclick=()=>loadMarket();$('usePrice').onclick=()=>{if(quote&&Date.now()-quoteReceived<15000){$('entry').value=quote;render();}};$('lock').onclick=()=>{if(lastResult){setLock(true);saveTradeHistory(true)}};$('unlock').onclick=()=>setLock(false);
 $('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('summary').value);$('copyStatus').textContent='Đã sao chép.'}catch{$('summary').focus();$('summary').select();$('copyStatus').textContent='Nhấn Ctrl+C để sao chép phần tóm tắt đã chọn.'}};
 $('download').onclick=()=>{const url=URL.createObjectURL(new Blob([$('summary').value],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='trade-setup-'+idFor()+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+
+const historyKey='christopher-trades-v1';let historyRecords=[],activeHistoryId=null;
+try{const saved=JSON.parse(localStorage.getItem(historyKey)||'[]');if(Array.isArray(saved))historyRecords=saved.filter(x=>x&&typeof x.id==='string').slice(0,500);}catch{$('historyStatus').textContent='Không đọc được lịch sử trên trình duyệt này.';}
+function drawTradeHistory(){
+ const body=$('historyRows');body.replaceChildren();
+ if(!historyRecords.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent='Chưa có lệnh. Bấm Ghi nhận để lưu.';tr.append(td);body.append(tr);}
+ for(const x of historyRecords){const tr=document.createElement('tr');const values=[new Date(x.createdAt).toLocaleString('vi-VN'),x.symbol+' · '+x.side+' '+x.leverage+'× · '+x.order,fmt(x.entry,6),fmt(x.quantity,8),fmt(x.margin)+' USDT',(x.targets||[]).map(z=>z>0?fmt(z,6):'—').join(' / ')+' / '+(x.sl>0?fmt(x.sl,6):'—')];for(const value of values){const td=document.createElement('td');td.textContent=value;tr.append(td);}body.append(tr);}
+ $('exportHistory').disabled=!historyRecords.length;
+}
+function saveTradeHistory(fresh=false){
+ const v=getValues(),r=positionMath(v,markValue,quote,'mark');if(!r)return;
+ if(fresh||!activeHistoryId)activeHistoryId=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+ const prior=historyRecords.find(x=>x.id===activeHistoryId);
+ const record={id:activeHistoryId,createdAt:prior?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString(),exchange:$('exchange').value,symbol:idFor(),side:v.d===1?'Long':'Short',order:$('order').value,marginMode:$('marginMode').value,entry:v.E,leverage:v.L,quantity:r.q,margin:r.margin,targets:[1,2,3].map(i=>n('scenarioTP'+i)),weights:[1,2,3].map(i=>n('scenarioW'+i)),sl:n('scenarioSL'),inputs:Object.fromEntries(tradeInputs.map(el=>[el.id,el.type==='checkbox'?el.checked:el.value])),results:scenarioData.map(x=>({...x}))};
+ historyRecords=[record,...historyRecords.filter(x=>x.id!==activeHistoryId)].slice(0,500);
+ try{localStorage.setItem(historyKey,JSON.stringify(historyRecords));$('historyStatus').textContent='Đã lưu trên trình duyệt này · Chưa đồng bộ tài khoản';}catch{$('historyStatus').textContent='Không lưu được trên trình duyệt. Bấm Tải lịch sử để giữ bản sao.';}
+ drawTradeHistory();
+}
+$('entry').addEventListener('input',()=>{if(locked&&activeHistoryId)saveTradeHistory();});
+$('exportHistory').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(historyRecords,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='lich-su-lenh.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+drawTradeHistory();
+
 syncFees(true);
 loadMarket();loadSymbols();
 setInterval(()=>{if(!document.hidden){price();refreshMark();refreshFunding();}},3000);
